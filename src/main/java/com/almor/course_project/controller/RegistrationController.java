@@ -1,7 +1,6 @@
 package com.almor.course_project.controller;
 
 import com.almor.course_project.dto.MessageResponse;
-import com.almor.course_project.dto.UserDto;
 import com.almor.course_project.dto.requests.LoginRequest;
 import com.almor.course_project.dto.requests.SigninRequest;
 import com.almor.course_project.service.UserDetailsServiceImpl;

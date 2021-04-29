@@ -30,6 +30,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Autowired
     private UserRepo userRepo;
 
+    //?????????
     @Autowired
     private RoleRepo roleRepo;
 
@@ -55,7 +56,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         return UserDetailsImpl.buildUserDetails(user);
     }
 
-    public void addUser(/*UserDto*/SigninRequest user) {
+    public void addUser(SigninRequest user) {
         //Refactor
         User newUser = new User();
         newUser.setName(user.getUsername());
@@ -69,7 +70,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     }
 
     //Refactor
-    public JwtResponse checkUser(/*UserDto*/LoginRequest user) {
+    public JwtResponse checkUser(LoginRequest user) {
 
         Authentication auth = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));

@@ -10,12 +10,20 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "roles")
-public class Role {
+@Table(name = "bonuses")
+public class Bonus {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    private String roleName;
+    private String name;
+
+    private int sum;
+
+    private String description;
+
+    private String pictureLink;
+
+
 }

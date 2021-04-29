@@ -15,8 +15,6 @@ import java.util.Date;
 @Component
 public class JwtUtils {
 
-    /*@Value("${com.almor.JwtSecret}")*/
-    /*private String JwtSecret;*/
     private SecretKey JwtSecret;
     @Value("${com.almor.JwtExpirationMs}")
     private int JwtExpirationMs;
@@ -24,8 +22,6 @@ public class JwtUtils {
     public JwtUtils() {
         JwtSecret = Keys.secretKeyFor(SignatureAlgorithm.HS512);
     }
-
-
 
     public boolean validateJwtToken(String authToken) {
 
