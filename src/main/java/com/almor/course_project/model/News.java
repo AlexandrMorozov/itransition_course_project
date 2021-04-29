@@ -16,12 +16,14 @@ public class News {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "news_id")
     private long id;
 
     private String header;
 
     private String text;
 
+    @Temporal(TemporalType.DATE)
     private Date dateOfPost;
 
     //add picture maybe?????

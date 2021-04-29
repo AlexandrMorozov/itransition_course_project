@@ -15,6 +15,7 @@ public class Bonus {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "bonus_id")
     private long id;
 
     private String name;
@@ -24,6 +25,5 @@ public class Bonus {
     private String description;
 
     private String pictureLink;
-
 
 }

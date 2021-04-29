@@ -15,7 +15,9 @@ public class Gallery {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "picture_id")
     private long id;
 
+    @Column(name = "picture_link")
     private String pictureLink;
 }

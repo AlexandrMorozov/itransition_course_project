@@ -1,10 +1,12 @@
 package com.almor.course_project.model;
 
+import com.almor.course_project.model.composite_tables.UsersLikes;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Data
 @NoArgsConstructor
@@ -15,8 +17,16 @@ public class Comment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "comment_id")
     private long id;
 
     private String text;
+
+    @ManyToOne(targetEntity = User.class)
+    @JoinColumn(name = "id")
+    private User commentAuthor;
+
+    @OneToMany(mappedBy = "user")
+    private Set<UsersLikes> likes;
 
 }
