@@ -1,6 +1,7 @@
 package com.almor.course_project.service;
 
 import com.almor.course_project.dto.JwtResponse;
+import com.almor.course_project.dto.UserDto;
 import com.almor.course_project.dto.requests.LoginRequest;
 import com.almor.course_project.dto.requests.SigninRequest;
 import com.almor.course_project.model.User;
@@ -25,7 +26,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class UserDetailsServiceImpl implements UserDetailsService {
+public class UserService implements UserDetailsService {
 
     @Autowired
     private UserRepo userRepo;
@@ -44,6 +45,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     private JwtUtils jwtUtils;
 
     @Override
+    //Explain-Explain!!!
     @Transactional
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
@@ -91,4 +93,59 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                 userDetails.getEmail(),
                 roles);
     }
+
+    /*///////////////////////////////////////////*/
+
+    public UserDto getUser(String userName) {
+
+        User user = userRepo.findByName(userName);
+
+        //Refactor
+        UserDto rUser = new UserDto();
+        rUser.setId(user.getId());
+        rUser.setName(user.getName());
+        rUser.setEmail(user.getEmail());
+        rUser.setPassword(user.getPassword());
+        rUser.setBonuses(user.getBonuses());
+        rUser.setRoles(user.getRoles());
+
+        return rUser;
+    }
+
+    public void deleteUser(String userName) {
+        User user = userRepo.findByName(userName);
+        userRepo.delete(user);
+    }
+
+    //Refactor
+    public boolean changeUserName(String userName) {
+        String currentUserName = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        if (userRepo.findByName(userName) == null) {
+            User user = userRepo.findByName(currentUserName);
+            user.setName(userName);
+            userRepo.save(user);
+            return true;
+        }
+
+        return false;
+    }
+
+    //Refactor
+    public boolean changeUserMail(String oldEmail, String newEmail) {
+
+        if (userRepo.findByEmail(newEmail) == null) {
+            User user = userRepo.findByEmail(oldEmail);
+            user.setEmail(newEmail);
+            userRepo.save(user);
+            return true;
+        }
+
+        return false;
+    }
+
+    /*public void redactUser(String oldName, String name, String email, String password) {
+        User user = userRepo.findByName(oldName);
+    }*/
+
 }

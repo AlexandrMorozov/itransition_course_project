@@ -1,6 +1,6 @@
 package com.almor.course_project.service.jwt;
 
-import com.almor.course_project.service.UserDetailsServiceImpl;
+import com.almor.course_project.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -20,7 +20,7 @@ public class AuthTokenFilter extends OncePerRequestFilter {
     @Autowired
     JwtUtils jwtUtils;
     @Autowired
-    UserDetailsServiceImpl userDetailsService;
+    UserService userDetailsService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)

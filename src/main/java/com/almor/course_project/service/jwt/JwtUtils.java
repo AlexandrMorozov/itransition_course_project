@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import io.jsonwebtoken.security.Keys;
 
 import javax.crypto.SecretKey;
+import java.util.Base64;
 import java.util.Date;
 
 
@@ -21,6 +22,7 @@ public class JwtUtils {
 
     public JwtUtils() {
         JwtSecret = Keys.secretKeyFor(SignatureAlgorithm.HS512);
+        System.out.println(Base64.getEncoder().encodeToString(JwtSecret.getEncoded()));
     }
 
     public boolean validateJwtToken(String authToken) {
@@ -37,7 +39,7 @@ public class JwtUtils {
     public String generateJwtToken(Authentication authentication) {
 
         return Jwts.builder()
-                .setSubject("").setIssuedAt(new Date()).setExpiration(new Date ((new Date()).getTime() + JwtExpirationMs))
+                .setSubject(authentication.getName()).setIssuedAt(new Date()).setExpiration(new Date ((new Date()).getTime() + JwtExpirationMs))
                 .signWith(SignatureAlgorithm.HS512, JwtSecret).compact();
     }
 

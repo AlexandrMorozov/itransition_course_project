@@ -27,7 +27,7 @@ public class UsersRatings {
     @ManyToOne
     @MapsId("campaignId")
     @JoinColumn(name = "campaign_id")
-    private Campaign comment;
+    private Campaign campaign;
 
     private int rating;
 }

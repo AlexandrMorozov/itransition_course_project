@@ -2,7 +2,7 @@ package com.almor.course_project.config;
 
 import com.almor.course_project.service.jwt.AuthEntryPoint;
 import com.almor.course_project.service.jwt.AuthTokenFilter;
-import com.almor.course_project.service.UserDetailsServiceImpl;
+import com.almor.course_project.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,7 +23,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig extends WebSecurityConfigurerAdapter{
 
     @Autowired
-    UserDetailsServiceImpl userDetailsService;
+    UserService userDetailsService;
 
     @Autowired
     private AuthEntryPoint unauthorizedHandler;
@@ -54,7 +54,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
         http.cors().and().csrf().disable()
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-                .authorizeRequests().antMatchers("/**").permitAll()
+                .authorizeRequests().antMatchers("/auth/**").permitAll()
                 .anyRequest().authenticated();
 
         http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
