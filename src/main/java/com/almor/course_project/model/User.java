@@ -18,6 +18,7 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "user_id")
     private Long id;
 
     private String name;
@@ -39,5 +40,10 @@ public class User {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "bonus_id"))
     private Set<Bonus> bonuses;
+
+    @OneToMany(targetEntity = Campaign.class, mappedBy = "user")
+    private Set<Campaign> campaigns;
+
+
 
 }

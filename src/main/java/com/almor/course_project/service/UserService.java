@@ -61,6 +61,7 @@ public class UserService implements UserDetailsService {
     }
 
     public void addUser(SigninRequest user) {
+
         //Refactor
         User newUser = new User();
         newUser.setName(user.getUsername());

@@ -18,6 +18,10 @@ public class Gallery {
     @Column(name = "picture_id")
     private long id;
 
+    @ManyToOne
+    @JoinColumn(name = "campaign_id")
+    private Campaign campaign;
+
     @Column(name = "picture_link")
     private String pictureLink;
 }

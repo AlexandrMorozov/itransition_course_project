@@ -22,8 +22,12 @@ public class Comment {
 
     private String text;
 
-    @ManyToOne(targetEntity = User.class)
-    @JoinColumn(name = "id")
+    @ManyToOne
+    @JoinColumn(name = "campaign_id")
+    private Campaign campaign;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
     private User commentAuthor;
 
     @OneToMany(mappedBy = "user")

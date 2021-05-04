@@ -19,6 +19,10 @@ public class News {
     @Column(name = "news_id")
     private long id;
 
+    @ManyToOne
+    @JoinColumn(name = "campaign_id")
+    private Campaign campaign;
+
     private String header;
 
     private String text;

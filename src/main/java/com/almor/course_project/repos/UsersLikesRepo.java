@@ -9,6 +9,4 @@ public interface UsersLikesRepo extends CrudRepository<UsersLikes, Long> {
     @Query("SELECT COUNT(ul.isLike) FROM UsersLikes ul WHERE ul.id.commentId = ?1 AND ul.isLike = ?2")
     int countCommentRates(int commentId, boolean rateValue);
 
-
-
 }

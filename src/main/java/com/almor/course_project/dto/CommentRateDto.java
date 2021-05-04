@@ -6,7 +6,6 @@ import lombok.Data;
 public class CommentRateDto {
 
     private Long commentId;
-
     private boolean rateValue;
 }
 

@@ -2,7 +2,9 @@ package com.almor.course_project.service.jwt;
 
 import com.almor.course_project.model.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,17 +14,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class UserDetailsImpl implements UserDetails {
-
-    public UserDetailsImpl(Long id, String name, String password, String email,
-                           boolean isEnabled, Collection<? extends GrantedAuthority> authorities) {
-        this.id = id;
-        this.name = name;
-        this.password = password;
-        this.email = email;
-        this.isEnabled = isEnabled;
-        this.authorities = authorities;
-    }
 
     private Long id;
 

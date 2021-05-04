@@ -28,4 +28,10 @@ public class CampaignController {
         return new ResponseEntity<>("Campaign not found", HttpStatus.BAD_REQUEST);
     }
 
+    @GetMapping("/delete")
+    public ResponseEntity<?> deleteCampaign(Long campaignId) {
+        campaignService.deleteCampaign(campaignId);
+        return ResponseEntity.ok("");
+    }
+
 }

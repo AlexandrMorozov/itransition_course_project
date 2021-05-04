@@ -18,7 +18,16 @@ public class Campaign {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "campaign_id")
     private long id;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @ManyToOne
+    @JoinColumn(name = "topic_id")
+    private Topic topic;
 
     private String name;
 
@@ -34,27 +43,19 @@ public class Campaign {
     @Temporal(TemporalType.DATE)
     private Date lastDateOfCampaign;
 
-    @OneToMany(targetEntity = Comment.class)
-    @JoinColumn(name = "comment_id")
+    @OneToMany(targetEntity = Comment.class, mappedBy = "campaign")
     private Set<Comment> comments;
 
-    @OneToMany(targetEntity = Tag.class)
-    @JoinColumn(name = "tag_id")
+    @OneToMany(targetEntity = Tag.class, mappedBy = "campaign")
     private Set<Tag> tags;
 
-    @OneToMany(targetEntity = News.class)
-    @JoinColumn(name = "news_id")
+    @OneToMany(targetEntity = News.class, mappedBy = "campaign")
     private Set<News> news;
 
-    @OneToMany(targetEntity = Bonus.class)
-    @JoinColumn(name = "bonus_id")
+    @OneToMany(targetEntity = Bonus.class, mappedBy = "campaign")
     private Set<Bonus> bonuses;
 
-    @OneToMany(targetEntity = Gallery.class)
-    @JoinColumn(name = "picture_id")
+    @OneToMany(targetEntity = Gallery.class, mappedBy = "campaign")
     private Set<Gallery> pictures;
-
-    @ManyToOne(targetEntity = Topic.class)
-    private Topic topic;
 
 }

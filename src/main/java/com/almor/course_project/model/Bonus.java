@@ -18,6 +18,10 @@ public class Bonus {
     @Column(name = "bonus_id")
     private long id;
 
+    @ManyToOne
+    @JoinColumn(name = "campaign_id")
+    private Campaign campaign;
+
     private String name;
 
     private int sum;
