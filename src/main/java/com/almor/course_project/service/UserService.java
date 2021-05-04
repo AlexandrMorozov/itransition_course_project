@@ -2,6 +2,7 @@ package com.almor.course_project.service;
 
 import com.almor.course_project.dto.JwtResponse;
 import com.almor.course_project.dto.UserDto;
+import com.almor.course_project.dto.mappings.UserMapping;
 import com.almor.course_project.dto.requests.LoginRequest;
 import com.almor.course_project.dto.requests.SigninRequest;
 import com.almor.course_project.model.User;
@@ -9,6 +10,7 @@ import com.almor.course_project.repos.RoleRepo;
 import com.almor.course_project.repos.UserRepo;
 import com.almor.course_project.service.jwt.JwtUtils;
 import com.almor.course_project.service.jwt.UserDetailsImpl;
+import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -100,16 +102,18 @@ public class UserService implements UserDetailsService {
 
         User user = userRepo.findByName(userName);
 
+        Mappers.getMapper(UserMapping.class).entityToDto(user);
+
         //Refactor
-        UserDto rUser = new UserDto();
+       /* UserDto rUser = new UserDto();
         rUser.setId(user.getId());
         rUser.setName(user.getName());
         rUser.setEmail(user.getEmail());
         rUser.setPassword(user.getPassword());
         rUser.setBonuses(user.getBonuses());
-        rUser.setRoles(user.getRoles());
+        rUser.setRoles(user.getRoles());*/
 
-        return rUser;
+        return /*rUser;*/Mappers.getMapper(UserMapping.class).entityToDto(user);
     }
 
     public void deleteUser(String userName) {
@@ -143,9 +147,5 @@ public class UserService implements UserDetailsService {
 
         return false;
     }
-
-    /*public void redactUser(String oldName, String name, String email, String password) {
-        User user = userRepo.findByName(oldName);
-    }*/
 
 }

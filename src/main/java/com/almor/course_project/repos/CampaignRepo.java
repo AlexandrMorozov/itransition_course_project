@@ -1,9 +1,11 @@
 package com.almor.course_project.repos;
 
 import com.almor.course_project.model.Campaign;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+
+import java.util.Optional;
 
 public interface CampaignRepo extends CrudRepository<Campaign, Long> {
 
+    Optional<Campaign> findByName(String name);
 }
