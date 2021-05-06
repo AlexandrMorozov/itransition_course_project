@@ -5,6 +5,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 
 @Getter
@@ -45,8 +46,11 @@ public class Campaign {
     @OneToMany(targetEntity = Comment.class, mappedBy = "campaign")
     private Set<Comment> comments;
 
-    @OneToMany(targetEntity = Tag.class, mappedBy = "campaign")
-    private Set<Tag> tags;
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(	name = "campaigns_tags",
+            joinColumns = @JoinColumn(name = "campaign_id"),
+            inverseJoinColumns = @JoinColumn(name = "tag_id"))
+    private Set<Tag> tags = new HashSet<>();
 
     @OneToMany(targetEntity = News.class, mappedBy = "campaign")
     private Set<News> news;

@@ -17,10 +17,6 @@ public class Tag {
     @Column(name = "tag_id")
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "campaign_id")
-    private Campaign campaign;
-
     private String name;
 
 }
