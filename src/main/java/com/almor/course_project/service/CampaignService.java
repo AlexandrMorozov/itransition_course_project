@@ -4,7 +4,6 @@ import com.almor.course_project.dto.CampaignDto;
 import com.almor.course_project.dto.mappings.CampaignMapping;
 import com.almor.course_project.model.Campaign;
 import com.almor.course_project.repos.CampaignRepo;
-import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,6 +21,10 @@ public class CampaignService {
         return Mappers.getMapper(CampaignMapping.class).entityToDto(campaign.get());
     }
 
+    /*public List<CampaignDto> getCampaign(User user) {
+        List<Campaign> userCampaigns = campaignRepo.findAllByUser(user);
+    }*/
+
     public boolean addCampaign(CampaignDto campaignDto) {
 
         if (!isCampaignExists(campaignDto.getName())) {
@@ -38,8 +41,11 @@ public class CampaignService {
         }
     }
 
-    public void deleteCampaign(Long campaignId) {
-        campaignRepo.deleteById(campaignId);
+    public void deleteCampaigns(CampaignDto[] campaignsDto) {
+        for (int i = 0; i < campaignsDto.length; i++) {
+            Campaign campaign = Mappers.getMapper(CampaignMapping.class).dtoToEntity(campaignsDto[i]);
+            campaignRepo.delete(campaign);
+        }
     }
 
     public boolean isCampaignExists(String campaignName) {

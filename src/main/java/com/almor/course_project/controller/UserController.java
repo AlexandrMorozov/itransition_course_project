@@ -22,6 +22,13 @@ public class UserController {
         return ResponseEntity.ok(userService.getUser(name));
     }
 
+    @GetMapping("/delete")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> deleteUser(String name) {
+        userService.deleteUser(name);
+        return ResponseEntity.ok("");
+    }
+
     @GetMapping("/changename")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<?> changeUserName(String name) {
@@ -40,6 +47,4 @@ public class UserController {
 
         return ResponseEntity.ok(new ResultMessageDto(result, message));
     }
-
-
 }

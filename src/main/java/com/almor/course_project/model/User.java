@@ -1,15 +1,13 @@
 package com.almor.course_project.model;
 
-import com.almor.course_project.model.composite_tables.UsersRatings;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -43,7 +41,4 @@ public class User {
 
     @OneToMany(targetEntity = Campaign.class, mappedBy = "user")
     private Set<Campaign> campaigns;
-
-
-
 }

@@ -1,12 +1,11 @@
 package com.almor.course_project.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -16,7 +15,7 @@ public class Gallery {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "picture_id")
-    private long id;
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "campaign_id")

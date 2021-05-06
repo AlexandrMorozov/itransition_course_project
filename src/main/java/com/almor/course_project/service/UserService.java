@@ -9,7 +9,6 @@ import com.almor.course_project.model.User;
 import com.almor.course_project.repos.RoleRepo;
 import com.almor.course_project.repos.UserRepo;
 import com.almor.course_project.service.jwt.JwtUtils;
-import com.almor.course_project.service.jwt.UserDetailsImpl;
 import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -103,7 +102,8 @@ public class UserService implements UserDetailsService {
 
         User user = userRepo.findByName(userName);
 
-        Mappers.getMapper(UserMapping.class).entityToDto(user);
+      //  System.out.println(user.getCampaigns().toArray());
+        //Mappers.getMapper(UserMapping.class).entityToDto(user);
 
         //Refactor
        /* UserDto rUser = new UserDto();

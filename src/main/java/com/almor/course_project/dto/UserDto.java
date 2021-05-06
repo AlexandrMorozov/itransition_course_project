@@ -1,14 +1,14 @@
 package com.almor.course_project.dto;
 
 import com.almor.course_project.model.Bonus;
+import com.almor.course_project.model.Campaign;
 import com.almor.course_project.model.Role;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.Set;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserDto {
@@ -24,4 +24,6 @@ public class UserDto {
     private Set<Bonus> bonuses;
 
     private Set<Role> roles;
+
+    private Set<CampaignDto> campaigns;
 }

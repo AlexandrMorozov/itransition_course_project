@@ -1,4 +1,4 @@
-package com.almor.course_project.service.jwt;
+package com.almor.course_project.service;
 
 import com.almor.course_project.model.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;

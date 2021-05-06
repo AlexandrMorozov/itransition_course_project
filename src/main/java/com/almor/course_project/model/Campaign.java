@@ -1,15 +1,14 @@
 package com.almor.course_project.model;
 
 import com.almor.course_project.model.composite_tables.UsersRatings;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.Date;
 import java.util.Set;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -19,7 +18,7 @@ public class Campaign {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "campaign_id")
-    private long id;
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
