@@ -29,5 +29,5 @@ public class UsersRatings {
     @JoinColumn(name = "campaign_id")
     private Campaign campaign;
 
-    private int rating;
+    private double rating;
 }

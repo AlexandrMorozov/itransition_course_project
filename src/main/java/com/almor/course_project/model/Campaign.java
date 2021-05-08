@@ -4,6 +4,7 @@ import com.almor.course_project.model.composite_tables.UsersRatings;
 import lombok.*;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;

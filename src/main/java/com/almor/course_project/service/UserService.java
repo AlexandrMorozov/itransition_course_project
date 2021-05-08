@@ -32,7 +32,6 @@ public class UserService implements UserDetailsService {
     @Autowired
     private UserRepo userRepo;
 
-    //?????????
     @Autowired
     private RoleRepo roleRepo;
 
@@ -50,10 +49,10 @@ public class UserService implements UserDetailsService {
     @Transactional
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        User user = userRepo.findByName(username);
+        User user = userRepo.findByName(username).get();
 
-        if (user == null) {
-            throw new UsernameNotFoundException("");
+        if (!userRepo.findByName(username).isPresent()) {
+            throw new UsernameNotFoundException("Not found!");
         }
 
         return UserDetailsImpl.buildUserDetails(user);
@@ -96,29 +95,22 @@ public class UserService implements UserDetailsService {
                 roles);
     }
 
-    /*///////////////////////////////////////////*/
 
     public UserDto getUser(String userName) {
+        User user = userRepo.findByName(userName).get();
+        return Mappers.getMapper(UserMapping.class).entityToDto(user);
+    }
 
-        User user = userRepo.findByName(userName);
+    public boolean isUserExists(String userName) {
 
-      //  System.out.println(user.getCampaigns().toArray());
-        //Mappers.getMapper(UserMapping.class).entityToDto(user);
-
-        //Refactor
-       /* UserDto rUser = new UserDto();
-        rUser.setId(user.getId());
-        rUser.setName(user.getName());
-        rUser.setEmail(user.getEmail());
-        rUser.setPassword(user.getPassword());
-        rUser.setBonuses(user.getBonuses());
-        rUser.setRoles(user.getRoles());*/
-
-        return /*rUser;*/Mappers.getMapper(UserMapping.class).entityToDto(user);
+        if(userRepo.findByName(userName).isPresent()) {
+            return true;
+        }
+        return false;
     }
 
     public void deleteUser(String userName) {
-        User user = userRepo.findByName(userName);
+        User user = userRepo.findByName(userName).get();
         userRepo.delete(user);
     }
 
@@ -127,7 +119,7 @@ public class UserService implements UserDetailsService {
         String currentUserName = SecurityContextHolder.getContext().getAuthentication().getName();
 
         if (userRepo.findByName(userName) == null) {
-            User user = userRepo.findByName(currentUserName);
+            User user = userRepo.findByName(currentUserName).get();
             user.setName(userName);
             userRepo.save(user);
             return true;
@@ -140,7 +132,7 @@ public class UserService implements UserDetailsService {
     public boolean changeUserMail(String oldEmail, String newEmail) {
 
         if (userRepo.findByEmail(newEmail) == null) {
-            User user = userRepo.findByEmail(oldEmail);
+            User user = userRepo.findByEmail(oldEmail).get();
             user.setEmail(newEmail);
             userRepo.save(user);
             return true;

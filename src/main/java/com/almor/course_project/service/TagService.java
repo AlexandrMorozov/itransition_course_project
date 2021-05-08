@@ -19,7 +19,6 @@ public class TagService {
     public List<TagDto> getAllTags() {
         List<TagDto> dtoTags = Mappers.getMapper(TagMapping.class)
                 .fromListModelToListDto(tagRepo.findAll());
-
         return dtoTags;
     }
 

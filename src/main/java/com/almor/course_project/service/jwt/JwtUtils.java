@@ -1,6 +1,5 @@
 package com.almor.course_project.service.jwt;
 
-import io.jsonwebtoken.*;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Value;
@@ -11,7 +10,6 @@ import io.jsonwebtoken.security.Keys;
 import javax.crypto.SecretKey;
 import java.util.Base64;
 import java.util.Date;
-
 
 @Component
 public class JwtUtils {
@@ -31,7 +29,6 @@ public class JwtUtils {
             Jwts.parserBuilder().setSigningKey(JwtSecret).build().parseClaimsJws(authToken);
             return true;
         } catch (Exception e) {
-            //logger msg
         }
         return false;
     }

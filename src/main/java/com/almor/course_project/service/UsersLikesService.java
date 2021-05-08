@@ -3,12 +3,9 @@ package com.almor.course_project.service;
 import com.almor.course_project.dto.CommentRateDto;
 import com.almor.course_project.model.Comment;
 import com.almor.course_project.model.User;
-import com.almor.course_project.model.composite_tables.UsersLikes;
 import com.almor.course_project.repos.UsersLikesRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 public class UsersLikesService {
