@@ -1,5 +1,6 @@
 package com.almor.course_project.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -39,6 +40,16 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "bonus_id"))
     private Set<Bonus> bonuses;
 
-    @OneToMany(targetEntity = Campaign.class, mappedBy = "user")
+    @JsonIgnore
+    @OneToMany(targetEntity = Campaign.class, mappedBy = "user",
+            cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Campaign> campaigns;
+
+    public void addRole(Role role) {
+        roles.add(role);
+    }
+
+    public boolean isOwnsRole(Role role) {
+        return roles.contains(role);
+    }
 }

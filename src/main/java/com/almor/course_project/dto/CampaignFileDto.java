@@ -1,22 +1,25 @@
 package com.almor.course_project.dto;
 
 import com.almor.course_project.model.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
-@Getter
 @Setter
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
 public class CampaignFileDto {
 
-
     private long id;
+
+    private UserDtoLite user;
 
     private String name;
 
@@ -38,8 +41,10 @@ public class CampaignFileDto {
 
     private Set<Bonus> bonuses;
 
-    private List<MultipartFile> images;
+    private Set<Gallery> pictures;
 
     private Topic topic;
+
+    private List<MultipartFile> image;
 
 }

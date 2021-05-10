@@ -1,16 +1,19 @@
 package com.almor.course_project.controller;
 
-import com.almor.course_project.dto.CampaignDto;
-import com.almor.course_project.dto.CampaignFileDto;
-import com.almor.course_project.dto.CampaignRatingDto;
-import com.almor.course_project.dto.CampaignsDto;
+import com.almor.course_project.dto.*;
+import com.almor.course_project.dto.requests.CampaignIndexRequest;
+import com.almor.course_project.model.Gallery;
 import com.almor.course_project.service.CampaignService;
+import com.almor.course_project.service.CloudService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import java.util.List;
 
@@ -22,10 +25,15 @@ public class CampaignController {
     @Autowired
     private CampaignService campaignService;
 
-    @GetMapping("/main")
+    @Autowired
+    private CloudService cloudService;
+
+
+    @GetMapping("/getcampaign")
     public ResponseEntity<?> getCampaign(String campaignName) {
+
         if (campaignService.isCampaignExists(campaignName)) {
-            return ResponseEntity.ok(new CampaignDto());
+            return ResponseEntity.ok(campaignService.getCampaign(campaignName));
         }
         return new ResponseEntity<>("Campaign not found", HttpStatus.BAD_REQUEST);
     }
@@ -37,14 +45,36 @@ public class CampaignController {
     }
 
     @PostMapping("/add")
+    /*@PostMapping( value = "/add")*/
     public ResponseEntity<?> addCampaign(@RequestBody CampaignDto campaignDto) {
-        campaignService.addCampaign(campaignDto);
+        //String f = "";
+        if (!campaignService.isCampaignExists(campaignDto.getName())) {
+
+            Long f = campaignService.createCampaign(campaignDto);
+
+            CampaignIndexRequest request = new CampaignIndexRequest(f);
+            return ResponseEntity.ok(request);
+        }
+        return ResponseEntity.ok(new CampaignIndexRequest(null));
+    }
+
+    @PostMapping("/update")
+    public ResponseEntity<?> updateCampaign(@RequestBody CampaignDto campaignDto) {
+
+        campaignService.updateCampaign(campaignDto);
+
         return ResponseEntity.ok("");
     }
 
     @PostMapping("/addimages")
-    public ResponseEntity<?> test( @RequestParam("image") List<MultipartFile> multipartFiles) {
-        System.out.println("w");
+    public ResponseEntity<?> loadCampaignImages(@RequestParam("image") List<MultipartFile> files,
+                                                @RequestParam("id") String id) {
+        System.out.println("qqqqqqq");
+
+        List<Gallery> imageLinks = cloudService.loadImages(files);
+
+        //campaignService.attachImages(imageLinks, userId);
+
         return ResponseEntity.ok("");
     }
 
@@ -58,6 +88,4 @@ public class CampaignController {
         return ResponseEntity.ok(campaignService.getLastUpdatedCampaigns());
     }
 
-    /*@GetMapping("/isexists")
-    public ResponseEntity<?> is*/
 }

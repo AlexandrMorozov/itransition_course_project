@@ -5,6 +5,7 @@ import com.almor.course_project.dto.UserDto;
 import com.almor.course_project.dto.mappings.UserMapping;
 import com.almor.course_project.dto.requests.LoginRequest;
 import com.almor.course_project.dto.requests.SigninRequest;
+import com.almor.course_project.model.Role;
 import com.almor.course_project.model.User;
 import com.almor.course_project.repos.RoleRepo;
 import com.almor.course_project.repos.UserRepo;
@@ -24,6 +25,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -101,6 +103,14 @@ public class UserService implements UserDetailsService {
         return Mappers.getMapper(UserMapping.class).entityToDto(user);
     }
 
+    public List<UserDto> getAllUsers() {
+
+        List<User> users = userRepo.findAll();
+
+        return Mappers.getMapper(UserMapping.class)
+                .fromListModelToListDto(users);
+    }
+
     public boolean isUserExists(String userName) {
 
         if(userRepo.findByName(userName).isPresent()) {
@@ -109,9 +119,62 @@ public class UserService implements UserDetailsService {
         return false;
     }
 
-    public void deleteUser(String userName) {
-        User user = userRepo.findByName(userName).get();
-        userRepo.delete(user);
+    public void deleteUsers(/*Long userId*/List<UserDto> usersDto) {
+
+        List<User> users = Mappers.getMapper(UserMapping.class)
+                .fromListDtoToListModel(usersDto);
+
+        for (int i = 0; i < users.size(); i++) {
+            userRepo.delete(users.get(i));
+        }
+
+       // Optional<User> user = userRepo.findById(userId);
+
+       /* if (user.isPresent()) {
+            userRepo.delete(user.get());
+            return true;
+        }*/
+
+        //return false;
+    }
+
+
+    public void changeUserStatus(/*Long userId*/List<UserDto> usersDto, boolean status) {
+
+        List<User> users =Mappers.getMapper(UserMapping.class)
+                .fromListDtoToListModel(usersDto);
+
+        for(int i = 0; i < users.size(); i++) {
+            users.get(i).setEnabled(status);
+        }
+
+      //  Optional<User> user = userRepo.findById(userId);
+
+        /*if (user.isPresent()) {
+            user.get().setEnabled(status);
+            userRepo.save(user.get());
+        }*/
+
+    }
+
+    public void addRole(/*Long userId, Role newRole*/List<UserDto> usersDto, Role newRole) {
+
+        List<User> users = Mappers.getMapper(UserMapping.class)
+                .fromListDtoToListModel(usersDto);
+
+        for (int i = 0; i < users.size(); i++) {
+            if (!users.get(i).isOwnsRole(newRole)) {
+                users.get(i).addRole(newRole);
+                userRepo.save(users.get(i));
+            }
+        }
+
+        /*User user = userRepo.findById(userId).get();
+
+        if (!user.isOwnsRole(newRole)) {
+            user.addRole(newRole);
+            userRepo.save(user);
+        }*/
     }
 
     //Refactor
@@ -137,7 +200,6 @@ public class UserService implements UserDetailsService {
             userRepo.save(user);
             return true;
         }
-
         return false;
     }
 

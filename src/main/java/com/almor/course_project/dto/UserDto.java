@@ -21,8 +21,10 @@ public class UserDto {
 
     private String email;
 
+    //
     private Set<Bonus> bonuses;
 
+    //
     private Set<Role> roles;
 
     private Set<CampaignDto> campaigns;

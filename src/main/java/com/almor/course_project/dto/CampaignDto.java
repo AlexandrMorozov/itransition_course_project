@@ -16,6 +16,8 @@ public class CampaignDto {
 
     private long id;
 
+    private UserDtoLite user;
+
     private String name;
 
     private String description;

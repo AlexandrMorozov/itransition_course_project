@@ -1,5 +1,6 @@
 package com.almor.course_project.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -17,6 +18,7 @@ public class Bonus {
     @Column(name = "bonus_id")
     private Long id;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "campaign_id")
     private Campaign campaign;
@@ -27,6 +29,5 @@ public class Bonus {
 
     private String description;
 
-    private String pictureLink;
 
 }

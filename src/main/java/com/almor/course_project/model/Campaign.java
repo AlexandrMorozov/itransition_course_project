@@ -5,6 +5,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -44,22 +45,39 @@ public class Campaign {
     @Temporal(TemporalType.DATE)
     private Date lastDateOfCampaign;
 
-    @OneToMany(targetEntity = Comment.class, mappedBy = "campaign")
+    @OneToMany(targetEntity = Comment.class, mappedBy = "campaign",
+            cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Comment> comments;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    /*@ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(	name = "campaigns_tags",
             joinColumns = @JoinColumn(name = "campaign_id"),
             inverseJoinColumns = @JoinColumn(name = "tag_id"))
-    private Set<Tag> tags = new HashSet<>();
+    private Set<Tag> tags = new HashSet<>();*/
+    @OneToMany(targetEntity = Tag.class, mappedBy = "campaign",
+            cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Tag> tags;
 
-    @OneToMany(targetEntity = News.class, mappedBy = "campaign")
+    @OneToMany(targetEntity = News.class, mappedBy = "campaign",
+            cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<News> news;
 
-    @OneToMany(targetEntity = Bonus.class, mappedBy = "campaign")
+    @OneToMany(targetEntity = Bonus.class, mappedBy = "campaign",
+            cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Bonus> bonuses;
 
-    @OneToMany(targetEntity = Gallery.class, mappedBy = "campaign")
+    @OneToMany(targetEntity = Gallery.class, mappedBy = "campaign",
+            cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Gallery> pictures;
+
+    public void updateBonuses(Collection<Bonus> newBonuses) {
+        bonuses.clear();
+        bonuses.addAll(newBonuses);
+    }
+
+    public void updateTags(Collection<Tag> newTags) {
+        tags.clear();
+        tags.addAll(newTags);
+    }
 
 }
