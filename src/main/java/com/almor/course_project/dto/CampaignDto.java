@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.Collection;
 import java.util.Date;
 import java.util.Set;
 
@@ -44,5 +45,9 @@ public class CampaignDto {
     private Set<Gallery> pictures;//
 
     private Topic topic;
+
+    public void addPictures(Collection<Gallery> imageLinks) {
+        pictures.addAll(imageLinks);
+    }
 
 }

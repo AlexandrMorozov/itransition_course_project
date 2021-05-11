@@ -8,6 +8,7 @@ import com.almor.course_project.model.Campaign;
 import com.almor.course_project.model.Gallery;
 import com.almor.course_project.model.Tag;
 import com.almor.course_project.repos.CampaignRepo;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -43,6 +44,12 @@ public class CampaignService {
         }
     }
 
+    private void attachPictures(Campaign campaign) {
+        for (Gallery gallery : campaign.getPictures()) {
+            gallery.setCampaign(campaign);
+        }
+    }
+
     public void attachImages(List<Gallery> imageLinks, Long userId) {
 
         Optional<Campaign> campaign = campaignRepo.findById(userId);
@@ -61,6 +68,18 @@ public class CampaignService {
 
         }
 
+    }
+
+    public CampaignDto deserializeCampaign(String serializedCampaign) {
+
+        CampaignDto resultCampaign = null;
+        try {
+            resultCampaign = new ObjectMapper().readValue(serializedCampaign, CampaignDto.class);
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+
+        return resultCampaign;
     }
 
 

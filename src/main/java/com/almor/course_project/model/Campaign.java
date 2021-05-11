@@ -81,7 +81,8 @@ public class Campaign {
     }
 
     public void updatePictures(Collection<Gallery> newPictures) {
-
+        pictures.clear();
+        pictures.addAll(newPictures);
     }
 
 }

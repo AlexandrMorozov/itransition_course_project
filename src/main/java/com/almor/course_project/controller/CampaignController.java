@@ -2,10 +2,8 @@ package com.almor.course_project.controller;
 
 import com.almor.course_project.dto.CampaignDto;
 import com.almor.course_project.dto.CampaignRatingDto;
-import com.almor.course_project.model.Gallery;
 import com.almor.course_project.service.CampaignService;
 import com.almor.course_project.service.CloudService;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -45,38 +43,30 @@ public class CampaignController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<?> addCampaign(@RequestParam("campaign") String campaign,
-                                         @RequestParam("image") List<MultipartFile> files) {
+    public ResponseEntity<?> addCampaign(@RequestParam(value = "image", required = false) List<MultipartFile> files,
+                                         @RequestParam("campaign") String campaign) {
 
-        CampaignDto resultCampaign = null;
-        //refactor
-        try {
-            resultCampaign = new ObjectMapper().readValue(campaign, CampaignDto.class);
-        } catch (Exception e) {
-            System.out.println(e);
+        CampaignDto resultCampaign = campaignService.deserializeCampaign(campaign);
+
+        if (files != null) {
+            resultCampaign.addPictures(cloudService.loadImages(files));
         }
 
         if (!campaignService.isCampaignExists(resultCampaign.getName())) {
-
             campaignService.createCampaign(resultCampaign);
-
-            //campaignService.attachImages(cloudService.loadImages(files));
-
         }
 
         return ResponseEntity.ok("");
     }
 
     @PostMapping("/update")
-    public ResponseEntity<?> updateCampaign(@RequestParam("campaign") String campaign,
-                                            @RequestParam("image") List<MultipartFile> files) {
-        CampaignDto resultCampaign = null;
+    public ResponseEntity<?> updateCampaign(@RequestParam(value = "image", required = false) List<MultipartFile> files,
+                                            @RequestParam("campaign") String campaign) {
 
-        //refactor
-        try {
-            resultCampaign = new ObjectMapper().readValue(campaign, CampaignDto.class);
-        } catch (Exception e) {
-            System.out.println(e);
+        CampaignDto resultCampaign = campaignService.deserializeCampaign(campaign);
+
+        if (files != null) {
+            resultCampaign.addPictures(cloudService.loadImages(files));
         }
 
         campaignService.updateCampaign(resultCampaign);
