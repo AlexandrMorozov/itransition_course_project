@@ -115,15 +115,23 @@ public class CampaignService {
         return campaigns;
     }
 
-    public void deleteCampaigns(CampaignDto[] campaignsDto) {
-        for (int i = 0; i < campaignsDto.length; i++) {
+    public void deleteCampaigns(List<CampaignDto> campaignsDto) {
+
+        List<Campaign> campaigns = Mappers
+                .getMapper(CampaignMapping.class)
+                .fromListDtoToModelList(campaignsDto);
+
+        campaignRepo.deleteAll(campaigns);
+
+
+       /* for (int i = 0; i < campaignsDto.length; i++) {
 
             Campaign campaign = Mappers
                     .getMapper(CampaignMapping.class)
                     .dtoToEntity(campaignsDto[i]);
 
             campaignRepo.delete(campaign);
-        }
+        }*/
     }
 
     public boolean isCampaignExists(String campaignName) {

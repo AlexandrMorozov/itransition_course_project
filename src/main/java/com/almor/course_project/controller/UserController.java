@@ -2,6 +2,7 @@ package com.almor.course_project.controller;
 
 import com.almor.course_project.dto.ResultMessageDto;
 import com.almor.course_project.dto.UserDto;
+import com.almor.course_project.dto.UserDtoLite;
 import com.almor.course_project.model.Role;
 import com.almor.course_project.service.RoleService;
 import com.almor.course_project.service.UserService;
@@ -29,6 +30,12 @@ public class UserController {
             return ResponseEntity.ok(userService.getUser(name));
         }
         return new ResponseEntity<>("User not found", HttpStatus.BAD_REQUEST);
+    }
+
+    @GetMapping("/essentials")
+    @PreAuthorize("hasRole('USER')")
+    public UserDtoLite getUserEssentials(String name) {
+        return userService.getUserEssentials(name);
     }
 
     @GetMapping("/delete")
@@ -78,20 +85,4 @@ public class UserController {
         return ResponseEntity.ok(new ResultMessageDto(result, message));
     }
 
-
-
-
-    //!!!!!!!!!!!!!!!!!!!!
-    @GetMapping("/isexists")
-    public ResponseEntity<?> isUserExists(String username) {
-
-        //!!!
-        Boolean n = new Boolean(userService.isUserExists(username));
-        /*Boolean.userService.isUserExists(username);
-        if (userService.isUserExists(username)) {
-            return ResponseEntity.ok();
-        }*/
-
-        return ResponseEntity.ok(n);
-    }
 }

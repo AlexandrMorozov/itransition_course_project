@@ -2,6 +2,7 @@ package com.almor.course_project.service;
 
 import com.almor.course_project.dto.JwtResponse;
 import com.almor.course_project.dto.UserDto;
+import com.almor.course_project.dto.UserDtoLite;
 import com.almor.course_project.dto.mappings.UserMapping;
 import com.almor.course_project.dto.requests.LoginRequest;
 import com.almor.course_project.dto.requests.SigninRequest;
@@ -101,6 +102,11 @@ public class UserService implements UserDetailsService {
     public UserDto getUser(String userName) {
         User user = userRepo.findByName(userName).get();
         return Mappers.getMapper(UserMapping.class).entityToDto(user);
+    }
+
+    public UserDtoLite getUserEssentials(String userName) {
+        User user = userRepo.findByName(userName).get();
+        return Mappers.getMapper(UserMapping.class).EntityToDtoLite(user);
     }
 
     public List<UserDto> getAllUsers() {

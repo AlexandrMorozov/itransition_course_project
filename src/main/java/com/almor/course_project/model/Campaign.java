@@ -80,4 +80,8 @@ public class Campaign {
         tags.addAll(newTags);
     }
 
+    public void updatePictures(Collection<Gallery> newPictures) {
+
+    }
+
 }

@@ -17,7 +17,7 @@ import java.util.Set;
 @AllArgsConstructor
 public class CampaignFileDto {
 
-    private long id;
+    private Long id;
 
     private UserDtoLite user;
 

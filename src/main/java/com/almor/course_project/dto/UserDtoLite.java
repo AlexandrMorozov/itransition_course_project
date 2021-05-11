@@ -9,6 +9,13 @@ import lombok.Setter;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class CampaignsDto {
-    private CampaignDto[] campaigns;
+public class UserDtoLite {
+
+    private Long id;
+
+    private String name;
+
+    private String password;
+
+    private String email;
 }

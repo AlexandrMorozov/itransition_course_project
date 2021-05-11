@@ -1,6 +1,7 @@
 package com.almor.course_project.dto.mappings;
 
 import com.almor.course_project.dto.UserDto;
+import com.almor.course_project.dto.UserDtoLite;
 import com.almor.course_project.model.User;
 import org.mapstruct.Mapper;
 
@@ -16,5 +17,9 @@ public interface UserMapping {
     List<User> fromListDtoToListModel(List<UserDto> usersDto);
 
     List<UserDto> fromListModelToListDto(List<User> users);
+
+    User dtoLiteToEntity(UserDtoLite userDtoLite);
+
+    UserDtoLite EntityToDtoLite(User user);
 
 }

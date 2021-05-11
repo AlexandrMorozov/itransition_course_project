@@ -8,8 +8,12 @@ import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface CampaignMapping {
+
     CampaignDto entityToDto(Campaign campaign);
+
     Campaign dtoToEntity(CampaignDto campaignDto);
 
     List<CampaignDto> fromListModelToListDto(List<Campaign> campaigns);
+
+    List<Campaign> fromListDtoToModelList(List<CampaignDto> dtoCampaigns);
 }

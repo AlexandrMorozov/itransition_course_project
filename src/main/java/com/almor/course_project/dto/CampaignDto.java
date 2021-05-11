@@ -1,6 +1,7 @@
 package com.almor.course_project.dto;
 
 import com.almor.course_project.model.*;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,9 +15,11 @@ import java.util.Set;
 @AllArgsConstructor
 public class CampaignDto {
 
-    private long id;
+    private Long id;
 
     private UserDtoLite user;
+    /*@JsonIgnore
+    private UserDto user;*/
 
     private String name;
 
@@ -30,15 +33,15 @@ public class CampaignDto {
 
     private Date lastDateOfCampaign;
 
-    private Set<Comment> comments;
+    private Set<Comment> comments;//
 
-    private Set<Tag> tags;
+    private Set<TagDto> tags;
 
-    private Set<News> news;
+    private Set<News> news;//
 
-    private Set<Bonus> bonuses;
+    private Set<BonusDto> bonuses;
 
-    private Set<Gallery> pictures;
+    private Set<Gallery> pictures;//
 
     private Topic topic;
 
