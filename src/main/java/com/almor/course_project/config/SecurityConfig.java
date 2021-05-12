@@ -2,7 +2,7 @@ package com.almor.course_project.config;
 
 import com.almor.course_project.service.jwt.AuthEntryPoint;
 import com.almor.course_project.service.jwt.AuthTokenFilter;
-import com.almor.course_project.service.UserService;
+import com.almor.course_project.service.entity_services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,7 +16,6 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
 
 @Configuration
 @EnableWebSecurity
@@ -55,8 +54,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
         http.cors().and().csrf().disable()
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-                .authorizeRequests().antMatchers("/auth/**",
-                "/gettags", "/getthemes", "/t", "/campaign/getrated", "/campaign/getupdated", "/campaign/addimages").permitAll()
+                .authorizeRequests().antMatchers("/auth/**", "/campaign/getrated", "/campaign/getupdated").permitAll()
+                .antMatchers("/user/delete", "user/changestatus", "user/addrole", "users//getallusers").hasRole("ADMIN")
                 .anyRequest().authenticated();
 
         http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);

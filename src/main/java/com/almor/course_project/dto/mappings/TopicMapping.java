@@ -9,7 +9,7 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface TopicMapping {
 
-    Topic fromDtoToModel(TopicDto topicDto);
+    Topic fromDtoToModel(TopicDto topicDto);//
     TopicDto fromModelToDto(Topic topic);
     List<TopicDto> fromListModelToListDto(List<Topic> topics);
 

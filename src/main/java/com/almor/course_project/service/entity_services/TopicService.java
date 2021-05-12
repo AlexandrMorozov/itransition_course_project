@@ -1,4 +1,4 @@
-package com.almor.course_project.service;
+package com.almor.course_project.service.entity_services;
 
 import com.almor.course_project.dto.TopicDto;
 import com.almor.course_project.dto.mappings.TopicMapping;

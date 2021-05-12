@@ -17,9 +17,6 @@ public class BonusDto {
 
     private Long id;
 
-  /*  @JsonIgnore
-    private CampaignDto campaign;*/
-
     private String name;
 
     private int sum;

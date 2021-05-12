@@ -1,4 +1,4 @@
-package com.almor.course_project.service;
+package com.almor.course_project.service.entity_services;
 
 import com.almor.course_project.dto.TagDto;
 import com.almor.course_project.dto.mappings.TagMapping;
@@ -18,8 +18,10 @@ public class TagService {
     private TagRepo tagRepo;
 
     public List<TagDto> getAllTags() {
+
         List<TagDto> dtoTags = Mappers.getMapper(TagMapping.class)
                 .fromListModelToListDto(tagRepo.findAll());
+
         return dtoTags;
     }
 

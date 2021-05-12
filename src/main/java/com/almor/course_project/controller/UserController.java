@@ -3,15 +3,19 @@ package com.almor.course_project.controller;
 import com.almor.course_project.dto.ResultMessageDto;
 import com.almor.course_project.dto.UserDto;
 import com.almor.course_project.dto.UserDtoLite;
+import com.almor.course_project.model.Campaign;
+import com.almor.course_project.model.Gallery;
 import com.almor.course_project.model.Role;
-import com.almor.course_project.service.RoleService;
-import com.almor.course_project.service.UserService;
+import com.almor.course_project.service.cloud_service.CloudService;
+import com.almor.course_project.service.entity_services.RoleService;
+import com.almor.course_project.service.entity_services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -22,9 +26,10 @@ public class UserController {
     private UserService userService;
     @Autowired
     private RoleService roleService;
+    @Autowired
+    private CloudService cloudService;
 
     @GetMapping
-    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<?> getUser(String name) {
         if (userService.isUserExists(name)) {
             return ResponseEntity.ok(userService.getUser(name));
@@ -33,30 +38,41 @@ public class UserController {
     }
 
     @GetMapping("/essentials")
-    @PreAuthorize("hasRole('USER')")
     public UserDtoLite getUserEssentials(String name) {
         return userService.getUserEssentials(name);
     }
 
     @GetMapping("/delete")
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<?> deleteUsers(/*String name*//*Long userId*/List<UserDto> users) {
-        userService.deleteUsers(/*name*/users);
+    public ResponseEntity<?> deleteUsers(List<UserDto> users) {
+
+        for (int i = 0; i < users.size(); i++) {
+
+            List<Campaign> deletedCampaigns = userService.deleteUser(users.get(i));
+
+            for (int j = 0; j < deletedCampaigns.size(); j++) {
+
+                List<Gallery> deletedPictures = new ArrayList<>();
+                deletedPictures.addAll(deletedCampaigns.get(j).getPictures());
+
+                cloudService.deleteImages(deletedPictures);
+            }
+        }
+
         return ResponseEntity.ok("");
     }
 
     @PostMapping("/changestatus")
-    public ResponseEntity<?> changeUsersStatus(/*Long userId*/List<UserDto> users, boolean status) {
+    public ResponseEntity<?> changeUsersStatus(List<UserDto> users, boolean status) {
         userService.changeUserStatus(users, status);
         return ResponseEntity.ok("");
     }
 
     @PostMapping("/addrole")
-    public ResponseEntity<?> addRoleToUsers(/*Long userId*/List<UserDto> users, String roleName) {
+    public ResponseEntity<?> addRoleToUsers(List<UserDto> users, String roleName) {
 
         Role newRole = roleService.getRole(roleName);
 
-        userService.addRole(/*userId*/users, newRole);
+        userService.addRole(users, newRole);
 
         return ResponseEntity.ok("");
     }
@@ -67,9 +83,9 @@ public class UserController {
     }
 
     @GetMapping("/changename")
-    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<?> changeUserName(String name) {
 
+        //refactor
         boolean result = userService.changeUserName(name);
         String message = result ? "1" : "2";
 
@@ -77,8 +93,8 @@ public class UserController {
     }
 
     @GetMapping("/changemail")
-    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<?> changeUserMail(String oldEmail, String newEmail) {
+        //refactor
         boolean result = userService.changeUserMail(oldEmail, newEmail);
         String message = result ? "1" : "2";
 

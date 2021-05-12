@@ -49,14 +49,13 @@ public class Campaign {
             cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Comment> comments;
 
-    /*@ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.LAZY,cascade = {CascadeType.DETACH, CascadeType.MERGE,
+            CascadeType.REFRESH, CascadeType.PERSIST})
     @JoinTable(	name = "campaigns_tags",
             joinColumns = @JoinColumn(name = "campaign_id"),
             inverseJoinColumns = @JoinColumn(name = "tag_id"))
-    private Set<Tag> tags = new HashSet<>();*/
-    @OneToMany(targetEntity = Tag.class, mappedBy = "campaign",
-            cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Tag> tags;
+    private Set<Tag> tags = new HashSet<>();
+
 
     @OneToMany(targetEntity = News.class, mappedBy = "campaign",
             cascade = CascadeType.ALL, orphanRemoval = true)

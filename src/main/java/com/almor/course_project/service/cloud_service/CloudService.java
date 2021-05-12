@@ -1,4 +1,4 @@
-package com.almor.course_project.service;
+package com.almor.course_project.service.cloud_service;
 
 import com.almor.course_project.model.Gallery;
 import com.cloudinary.Cloudinary;
@@ -29,14 +29,13 @@ public class CloudService {
                 "api_secret", secret));
     }
 
-    public String[] loadImageToCloud(MultipartFile sourceFile) {
+    private String[] loadImageToCloud(MultipartFile sourceFile) {
 
         Map<String, Object> result = null;
 
         String[] answer = null;
 
         try {
-
             Map<String, Object> params = ObjectUtils.asMap("resource_type", "auto");
             result = cloudinary.uploader().upload(sourceFile.getBytes(), params);
 
@@ -47,6 +46,14 @@ public class CloudService {
         }
 
         return answer;
+    }
+
+    private void deleteImageFromCloud(String publicId) {
+        try {
+            cloudinary.uploader().destroy(publicId, ObjectUtils.asMap());
+        } catch (IOException e) {
+
+        }
     }
 
     public List<Gallery> loadImages(List<MultipartFile> files) {
@@ -62,14 +69,12 @@ public class CloudService {
             }
         }
         return imageLinks;
-
     }
 
-    public void deleteImageFromCloud(String publicId) {
-        try {
-            cloudinary.uploader().destroy(publicId, ObjectUtils.asMap());
-        } catch (IOException e) {
+    public void deleteImages(List<Gallery> pictureLinks) {
 
+        for (int i = 0; i < pictureLinks.size(); i++) {
+            deleteImageFromCloud(pictureLinks.get(i).getPublicId());
         }
     }
 }

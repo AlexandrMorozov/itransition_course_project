@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 
 @Data
@@ -47,6 +48,11 @@ public class CampaignDto {
     private Topic topic;
 
     public void addPictures(Collection<Gallery> imageLinks) {
+
+        if (pictures == null) {
+            pictures = new HashSet<>();
+        }
+
         pictures.addAll(imageLinks);
     }
 

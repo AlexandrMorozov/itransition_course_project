@@ -2,8 +2,9 @@ package com.almor.course_project.controller;
 
 import com.almor.course_project.dto.CampaignDto;
 import com.almor.course_project.dto.CampaignRatingDto;
-import com.almor.course_project.service.CampaignService;
-import com.almor.course_project.service.CloudService;
+import com.almor.course_project.model.Gallery;
+import com.almor.course_project.service.entity_services.CampaignService;
+import com.almor.course_project.service.cloud_service.CloudService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +24,6 @@ public class CampaignController {
     @Autowired
     private CloudService cloudService;
 
-
     @GetMapping("/getcampaign")
     public ResponseEntity<?> getCampaign(String campaignName) {
 
@@ -37,7 +37,11 @@ public class CampaignController {
     @PostMapping("/delete")
     public ResponseEntity<?> deleteCampaign(@RequestBody List<CampaignDto> campaigns) {
 
-       campaignService.deleteCampaigns(campaigns);
+        for (int i = 0; i < campaigns.size(); i++) {
+
+            List<Gallery> deletedPictures = campaignService.deleteCampaign(campaigns.get(i));
+            cloudService.deleteImages(deletedPictures);
+        }
 
         return ResponseEntity.ok("");
     }
@@ -80,8 +84,8 @@ public class CampaignController {
     }
 
     @GetMapping("/getupdated")
-    public ResponseEntity<List<CampaignDto>> getLastUpdatedCampaigns() {
-        return ResponseEntity.ok(campaignService.getLastUpdatedCampaigns());
+    public ResponseEntity<List<CampaignRatingDto>> getLastUpdatedCampaigns() {
+        return ResponseEntity.accepted().body(campaignService.getLastUpdatedCampaigns());
     }
 
 }

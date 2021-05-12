@@ -5,12 +5,6 @@ import lombok.Data;
 @Data
 public class SigninRequest {
 
-    public SigninRequest(String username, String password, String email) {
-        this.username = username;
-        this.password = password;
-        this.email = email;
-    }
-
     //Think about role distribution
     private String username;
 

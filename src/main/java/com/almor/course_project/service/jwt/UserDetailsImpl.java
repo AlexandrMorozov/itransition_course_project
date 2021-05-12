@@ -1,4 +1,4 @@
-package com.almor.course_project.service;
+package com.almor.course_project.service.jwt;
 
 import com.almor.course_project.model.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -21,7 +21,7 @@ public class UserDetailsImpl implements UserDetails {
     private Long id;
 
     private String name;
-    @JsonIgnore
+    @JsonIgnore//Explain
     private String password;
 
     private String email;

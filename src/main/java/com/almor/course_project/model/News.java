@@ -30,6 +30,4 @@ public class News {
 
     @Temporal(TemporalType.DATE)
     private Date dateOfPost;
-
-    //add picture maybe?????
 }

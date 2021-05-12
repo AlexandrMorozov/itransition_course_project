@@ -1,6 +1,6 @@
 package com.almor.course_project.service.jwt;
 
-import com.almor.course_project.service.UserService;
+import com.almor.course_project.service.entity_services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
