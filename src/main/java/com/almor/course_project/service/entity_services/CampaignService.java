@@ -38,11 +38,11 @@ public class CampaignService {
         }
     }
 
-   /* private void attachTags(Campaign campaign) {
-        for (Tag gallery : campaign.getPictures()) {
-            gallery.setCampaign(campaign);
+    private void attachTags(Campaign campaign) {
+        for (Tag tag : campaign.getTags()) {
+            tag.getCampaigns().add(campaign);
         }
-    }*/
+    }
 
     public CampaignDto deserializeCampaign(String serializedCampaign) {
 
@@ -51,7 +51,7 @@ public class CampaignService {
         try {
             resultCampaign = new ObjectMapper().readValue(serializedCampaign, CampaignDto.class);
         } catch (Exception e) {
-            System.out.println(e);
+
         }
 
         return resultCampaign;
@@ -87,6 +87,7 @@ public class CampaignService {
 
         attachBonuses(campaign);
         attachPictures(campaign);
+        attachTags(campaign);
 
         campaignRepo.save(campaign);
     }

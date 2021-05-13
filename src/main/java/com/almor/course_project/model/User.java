@@ -1,5 +1,6 @@
 package com.almor.course_project.model;
 
+import com.almor.course_project.model.composite_tables.UsersRatings;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
@@ -44,6 +45,10 @@ public class User {
     @OneToMany(targetEntity = Campaign.class, mappedBy = "user",
             cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Campaign> campaigns;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<UsersRatings> usersRatings = new HashSet<>();
 
     public void addRole(Role role) {
         roles.add(role);

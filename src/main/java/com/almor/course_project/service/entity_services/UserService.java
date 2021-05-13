@@ -1,6 +1,6 @@
 package com.almor.course_project.service.entity_services;
 
-import com.almor.course_project.dto.JwtResponse;
+import com.almor.course_project.dto.requests.JwtResponse;
 import com.almor.course_project.dto.UserDto;
 import com.almor.course_project.dto.UserDtoLite;
 import com.almor.course_project.dto.mappings.UserMapping;
@@ -51,7 +51,6 @@ public class UserService implements UserDetailsService {
     private JwtUtils jwtUtils;
 
     @Override
-    //Explain-Explain!!!
     @Transactional
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
@@ -66,13 +65,11 @@ public class UserService implements UserDetailsService {
 
     public void addUser(SigninRequest user) {
 
-        //Refactor
         User newUser = new User();
         newUser.setName(user.getUsername());
         newUser.setPassword(passwordEncoder.encode(user.getPassword()));
         newUser.setEmail(user.getEmail());
         newUser.setEnabled(true);
-        //Think of role assignment mechanism
         newUser.setRoles(Collections.singleton(roleRepo.findByRoleName("ROLE_USER")));
 
         userRepo.save(newUser);
@@ -123,13 +120,6 @@ public class UserService implements UserDetailsService {
         return false;
     }
 
-    private void terminateCurrentUserSession() {
-        SecurityContextHolder.getContext()
-                .getAuthentication().setAuthenticated(false);
-    }
-
-
-
     public List<Campaign> deleteUser(UserDto userDto) {
 
         User user = Mappers.getMapper(UserMapping.class).dtoToEntity(userDto);
@@ -137,10 +127,6 @@ public class UserService implements UserDetailsService {
         List<Campaign> deletedCampaigns = new ArrayList<>();
 
         deletedCampaigns.addAll(user.getCampaigns());
-
-        /*if (user.) {
-
-        }*/
 
         userRepo.delete(user);
 
@@ -157,9 +143,6 @@ public class UserService implements UserDetailsService {
 
             users.get(i).setEnabled(status);
 
-          /*  if (users.get(i).) {
-
-            }*/
         }
 
         userRepo.saveAll(users);
@@ -182,7 +165,6 @@ public class UserService implements UserDetailsService {
         }
     }
 
-    //Refactor
     public boolean changeUserName(String userName) {
         String currentUserName = SecurityContextHolder.getContext().getAuthentication().getName();
 
@@ -196,7 +178,6 @@ public class UserService implements UserDetailsService {
         return false;
     }
 
-    //Refactor
     public boolean changeUserMail(String oldEmail, String newEmail) {
 
         if (userRepo.findByEmail(newEmail) == null) {

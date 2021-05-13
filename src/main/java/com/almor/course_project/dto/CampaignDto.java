@@ -20,8 +20,6 @@ public class CampaignDto {
     private Long id;
 
     private UserDtoLite user;
-    /*@JsonIgnore
-    private UserDto user;*/
 
     private String name;
 

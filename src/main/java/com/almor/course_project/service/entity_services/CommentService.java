@@ -22,31 +22,9 @@ public class CommentService {
     @Autowired
     private CommentRepo commentRepo;
 
-    public void addComment(CommentDto newComment, UserDto user) {
+   /* public void addComment(CommentDto newComment, UserDto user) {
 
         Comment comment = Mappers.getMapper(CommentMapping.class).dtoToEntity(newComment);
         commentRepo.save(comment);
-
-        /*Comment comment = new Comment();
-        comment.setText(newComment.getComment());
-        comment.setCommentAuthor(user);*/
-    }
-
-    /*public void rateComment(Long commentId, Long userId, boolean rate) {
-
-        UsersLikesKey key = new UsersLikesKey(userId, commentId);
-        UsersLikes rated = new UsersLikes(key, ,rate);
-    }*/
-
-    /*public List<Comment> receiveCampaignComments(Long campaignId) {
-        return commentRepo.findAllById(campaignId);
-    }*/
-
-   /* public void rateComment(CommentRateDto commentRate) {
-        Optional<Comment> comment = commentRepo.findById(commentRate.getCommentId());
-
-        if (comment.isPresent()) {
-            comment.get().
-        }
     }*/
 }

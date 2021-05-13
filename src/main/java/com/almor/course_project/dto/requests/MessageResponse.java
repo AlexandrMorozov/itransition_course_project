@@ -1,4 +1,4 @@
-package com.almor.course_project.dto;
+package com.almor.course_project.dto.requests;
 
 import lombok.Data;
 

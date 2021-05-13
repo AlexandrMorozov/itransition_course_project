@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 @Getter
@@ -22,7 +23,7 @@ public class Tag {
     @Column(unique = true)
     private String name;
 
-   /* @ManyToMany(mappedBy = "tags")
-    private Set<Campaign> campaigns;*/
+    @ManyToMany(mappedBy = "tags")
+    private Set<Campaign> campaigns = new HashSet<>();
 
 }

@@ -15,21 +15,6 @@ public class UsersLikesService {
 
     public void rateComment(CommentRateDto commentRateDto, User user, Comment comment) {
 
-       /* if (usersLikesRepo.findById()) {
-
-        }*/
-
-
-        /*Optional<UsersLikes> commentRate = usersLikesRepo.findById(commentRateDto.getCommentId());
-        if (commentRate.isPresent() && commentRate.get().isLike() != commentRateDto.isRateValue()) {
-            commentRate.get().setLike(commentRateDto.isRateValue());
-            usersLikesRepo.save(commentRate.get());
-        } else if (!commentRate.isPresent()) {
-            UsersLikes rate = new UsersLikes();
-            rate.setLike(commentRateDto.isRateValue());
-            rate.
-            usersLikesRepo.save();
-        }*/
     }
 
 }

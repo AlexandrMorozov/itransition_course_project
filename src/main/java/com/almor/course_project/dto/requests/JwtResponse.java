@@ -1,4 +1,4 @@
-package com.almor.course_project.dto;
+package com.almor.course_project.dto.requests;
 
 import lombok.Data;
 
@@ -19,7 +19,8 @@ public class JwtResponse {
 
     private List<String> roles;
 
-    public JwtResponse(String accessToken, Long id, String name, String email, List<String> roles) {
+    public JwtResponse(String accessToken, Long id, String name,
+                       String email, List<String> roles) {
         this.token = accessToken;
         this.id = id;
         this.name = name;

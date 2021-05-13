@@ -1,5 +1,7 @@
 package com.almor.course_project.model;
 
+import com.almor.course_project.model.composite_tables.UsersRatings;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -44,16 +46,14 @@ public class Campaign {
     private Date lastDateOfCampaign;
 
     @OneToMany(targetEntity = Comment.class, mappedBy = "campaign",
-            cascade = CascadeType.ALL, orphanRemoval = true)
+            cascade = CascadeType.MERGE, orphanRemoval = true)
     private Set<Comment> comments;
 
-    @ManyToMany(fetch = FetchType.LAZY,/*cascade = {CascadeType.DETACH, CascadeType.MERGE,
-            CascadeType.REFRESH, CascadeType.PERSIST}*/ cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(	name = "campaigns_tags",
             joinColumns = @JoinColumn(name = "campaign_id"),
             inverseJoinColumns = @JoinColumn(name = "tag_id"))
-    private Set<Tag> tags/* = new HashSet<>()*/;
-
+    private Set<Tag> tags = new HashSet<>();
 
     @OneToMany(targetEntity = News.class, mappedBy = "campaign",
             cascade = CascadeType.ALL, orphanRemoval = true)
@@ -66,6 +66,10 @@ public class Campaign {
     @OneToMany(targetEntity = Gallery.class, mappedBy = "campaign",
             cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Gallery> pictures;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "campaign", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<UsersRatings> usersRatings = new HashSet<>();
 
     public void updateBonuses(Collection<Bonus> newBonuses) {
         bonuses.clear();

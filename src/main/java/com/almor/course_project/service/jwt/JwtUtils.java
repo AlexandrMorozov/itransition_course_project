@@ -20,7 +20,6 @@ public class JwtUtils {
 
     public JwtUtils() {
         JwtSecret = Keys.secretKeyFor(SignatureAlgorithm.HS512);
-        //System.out.println(Base64.getEncoder().encodeToString(JwtSecret.getEncoded()));
     }
 
     public boolean validateJwtToken(String authToken) {
