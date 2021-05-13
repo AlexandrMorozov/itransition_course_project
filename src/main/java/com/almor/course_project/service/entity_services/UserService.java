@@ -29,6 +29,7 @@ import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -54,13 +55,13 @@ public class UserService implements UserDetailsService {
     @Transactional
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        User user = userRepo.findByName(username).get();
+        Optional<User> user = userRepo.findByName(username);
 
-        if (!userRepo.findByName(username).isPresent()) {
+        if (!user.isPresent()) {
             throw new UsernameNotFoundException("Not found!");
         }
 
-        return UserDetailsImpl.buildUserDetails(user);
+        return UserDetailsImpl.buildUserDetails(user.get());
     }
 
     public void addUser(SigninRequest user) {
@@ -93,11 +94,8 @@ public class UserService implements UserDetailsService {
                 .map(item -> item.getAuthority())
                 .collect(Collectors.toList());
 
-        return new JwtResponse(jwt,
-                userDetails.getId(),
-                userDetails.getUsername(),
-                userDetails.getEmail(),
-                roles);
+        return new JwtResponse(jwt, userDetails.getId(), userDetails.getUsername(),
+                userDetails.getEmail(), roles);
     }
 
 
@@ -112,11 +110,9 @@ public class UserService implements UserDetailsService {
     }
 
     public List<UserDto> getAllUsers() {
-
         List<User> users = userRepo.findAll();
 
-        return Mappers.getMapper(UserMapping.class)
-                .fromListModelToListDto(users);
+        return Mappers.getMapper(UserMapping.class).fromListModelToListDto(users);
     }
 
     public boolean isUserExists(String userName) {
@@ -127,12 +123,24 @@ public class UserService implements UserDetailsService {
         return false;
     }
 
+    private void terminateCurrentUserSession() {
+        SecurityContextHolder.getContext()
+                .getAuthentication().setAuthenticated(false);
+    }
+
+
+
     public List<Campaign> deleteUser(UserDto userDto) {
 
         User user = Mappers.getMapper(UserMapping.class).dtoToEntity(userDto);
 
         List<Campaign> deletedCampaigns = new ArrayList<>();
+
         deletedCampaigns.addAll(user.getCampaigns());
+
+        /*if (user.) {
+
+        }*/
 
         userRepo.delete(user);
 
@@ -142,12 +150,19 @@ public class UserService implements UserDetailsService {
 
     public void changeUserStatus(List<UserDto> usersDto, boolean status) {
 
-        List<User> users =Mappers.getMapper(UserMapping.class)
+        List<User> users = Mappers.getMapper(UserMapping.class)
                 .fromListDtoToListModel(usersDto);
 
         for(int i = 0; i < users.size(); i++) {
+
             users.get(i).setEnabled(status);
+
+          /*  if (users.get(i).) {
+
+            }*/
         }
+
+        userRepo.saveAll(users);
 
     }
 
@@ -157,6 +172,7 @@ public class UserService implements UserDetailsService {
                 .fromListDtoToListModel(usersDto);
 
         for (int i = 0; i < users.size(); i++) {
+
             if (!users.get(i).isOwnsRole(newRole)) {
 
                 users.get(i).addRole(newRole);

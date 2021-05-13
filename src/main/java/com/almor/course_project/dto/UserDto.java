@@ -18,6 +18,8 @@ public class UserDto {
     private String password;
 
     private String email;
+
+    private boolean isEnabled;
     
     private Set<BonusDto> bonuses;
     

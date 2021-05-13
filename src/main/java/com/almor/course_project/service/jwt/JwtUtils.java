@@ -20,11 +20,10 @@ public class JwtUtils {
 
     public JwtUtils() {
         JwtSecret = Keys.secretKeyFor(SignatureAlgorithm.HS512);
-        System.out.println(Base64.getEncoder().encodeToString(JwtSecret.getEncoded()));
+        //System.out.println(Base64.getEncoder().encodeToString(JwtSecret.getEncoded()));
     }
 
     public boolean validateJwtToken(String authToken) {
-
         try {
             Jwts.parserBuilder().setSigningKey(JwtSecret).build().parseClaimsJws(authToken);
             return true;
