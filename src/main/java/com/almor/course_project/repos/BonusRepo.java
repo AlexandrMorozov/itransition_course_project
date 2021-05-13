@@ -7,5 +7,6 @@ import java.util.List;
 
 public interface BonusRepo extends CrudRepository<Bonus, Long> {
 
-    //List<Bonus> findAllByUser
+
+
 }

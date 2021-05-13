@@ -26,38 +26,6 @@ public class CampaignService {
         return Mappers.getMapper(CampaignMapping.class).entityToDto(campaign.get());
     }
 
-    private void attachBonuses(Campaign campaign) {
-        for (Bonus bonus : campaign.getBonuses()) {
-            bonus.setCampaign(campaign);
-        }
-    }
-
-    private void attachPictures(Campaign campaign) {
-        for (Gallery gallery : campaign.getPictures()) {
-            gallery.setCampaign(campaign);
-        }
-    }
-
-    private void attachTags(Campaign campaign) {
-        for (Tag tag : campaign.getTags()) {
-            tag.getCampaigns().add(campaign);
-        }
-    }
-
-    public CampaignDto deserializeCampaign(String serializedCampaign) {
-
-        CampaignDto resultCampaign = null;
-
-        try {
-            resultCampaign = new ObjectMapper().readValue(serializedCampaign, CampaignDto.class);
-        } catch (Exception e) {
-
-        }
-
-        return resultCampaign;
-    }
-
-
     //refactor
     public void updateCampaign(CampaignDto campaignDto) {
 
@@ -92,13 +60,6 @@ public class CampaignService {
         campaignRepo.save(campaign);
     }
 
-    public List<CampaignRatingDto> getMostRatedCampaigns() {
-        return campaignRepo.findMostRatedCampaigns(PageRequest.of(0, 3));
-    }
-
-    public List<CampaignRatingDto> getLastUpdatedCampaigns() {
-        return campaignRepo.findRecentlyUpdatedCampaigns(PageRequest.of(0, 3));
-    }
 
     public List<Gallery> deleteCampaign(CampaignDto campaignDto) {
 
@@ -110,6 +71,65 @@ public class CampaignService {
         campaignRepo.delete(campaign);
 
         return pictures;
+    }
+
+    public CampaignDto deserializeCampaign(String serializedCampaign) {
+
+        CampaignDto resultCampaign = null;
+
+        try {
+            resultCampaign = new ObjectMapper().readValue(serializedCampaign, CampaignDto.class);
+        } catch (Exception e) {
+
+        }
+
+        return resultCampaign;
+    }
+
+
+    //
+    public boolean receiveUserDonation(String campaignName, int donationSum) {
+
+        Optional<Campaign> campaign = campaignRepo.findByName(campaignName);
+
+        if (campaign.isPresent()) {
+
+            campaign.get().addSum(donationSum);
+            campaignRepo.save(campaign.get());
+
+            return true;
+        }
+
+        return false;
+    }
+
+
+    private void attachBonuses(Campaign campaign) {
+        for (Bonus bonus : campaign.getBonuses()) {
+            bonus.setCampaign(campaign);
+        }
+    }
+
+    private void attachPictures(Campaign campaign) {
+        for (Gallery gallery : campaign.getPictures()) {
+            gallery.setCampaign(campaign);
+        }
+    }
+
+    private void attachTags(Campaign campaign) {
+        for (Tag tag : campaign.getTags()) {
+            tag.getCampaigns().add(campaign);
+        }
+    }
+
+
+
+    public List<CampaignRatingDto> getMostRatedCampaigns() {
+        return campaignRepo.findMostRatedCampaigns(PageRequest.of(0, 3));
+    }
+
+    public List<CampaignRatingDto> getLastUpdatedCampaigns() {
+        return campaignRepo.findRecentlyUpdatedCampaigns(PageRequest.of(0, 3));
     }
 
     public boolean isCampaignExists(String campaignName) {

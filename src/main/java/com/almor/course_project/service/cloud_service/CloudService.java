@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+//Service to work with cloud storage
 @Service
 public class CloudService {
 

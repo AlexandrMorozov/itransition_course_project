@@ -88,4 +88,9 @@ public class CampaignController {
         return ResponseEntity.accepted().body(campaignService.getLastUpdatedCampaigns());
     }
 
+    @GetMapping("/donate")
+    public void donateMoney() {
+
+    }
+
 }

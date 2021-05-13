@@ -64,8 +64,6 @@ public class UserController {
     @PostMapping("/changestatus")
     public ResponseEntity<?> changeUsersStatus(@RequestBody UserStatusChangeRequest request) {
 
-        String d = "";
-
         userService.changeUserStatus(request.getUsers(), request.isNewStatus());
 
         return ResponseEntity.ok("");
@@ -88,21 +86,14 @@ public class UserController {
 
     @GetMapping("/changename")
     public ResponseEntity<?> changeUserName(String name) {
-
-        //refactor
         boolean result = userService.changeUserName(name);
-        //String message = result ? "1" : "2";
-
-        return ResponseEntity.ok(/*new ResultMessageDto(result, message)*/"");
+        return ResponseEntity.ok("");
     }
 
     @GetMapping("/changemail")
     public ResponseEntity<?> changeUserMail(String oldEmail, String newEmail) {
-        //refactor
         boolean result = userService.changeUserMail(oldEmail, newEmail);
-        //String message = result ? "1" : "2";
-
-        return ResponseEntity.ok(/*new ResultMessageDto(result, message)*/"");
+        return ResponseEntity.ok("");
     }
 
 }

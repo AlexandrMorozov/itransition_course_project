@@ -39,6 +39,8 @@ public class Campaign {
 
     private int sumOfMoney;
 
+    private int sumOfFundedMoney;
+
     @Temporal(TemporalType.DATE)
     private Date lastUpdateDate;
 
@@ -84,6 +86,10 @@ public class Campaign {
     public void updatePictures(Collection<Gallery> newPictures) {
         pictures.clear();
         pictures.addAll(newPictures);
+    }
+
+    public void addSum(int donatedSum) {
+        sumOfFundedMoney = sumOfFundedMoney + donatedSum;
     }
 
 }
