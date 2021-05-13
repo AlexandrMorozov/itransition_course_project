@@ -18,4 +18,6 @@ public class UserDtoLite {
     private String password;
 
     private String email;
+
+    private boolean isEnabled;
 }

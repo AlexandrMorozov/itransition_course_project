@@ -38,6 +38,12 @@ public class CampaignService {
         }
     }
 
+   /* private void attachTags(Campaign campaign) {
+        for (Tag gallery : campaign.getPictures()) {
+            gallery.setCampaign(campaign);
+        }
+    }*/
+
     public CampaignDto deserializeCampaign(String serializedCampaign) {
 
         CampaignDto resultCampaign = null;

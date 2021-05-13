@@ -1,8 +1,9 @@
 package com.almor.course_project.controller;
 
-import com.almor.course_project.dto.ResultMessageDto;
 import com.almor.course_project.dto.UserDto;
 import com.almor.course_project.dto.UserDtoLite;
+import com.almor.course_project.dto.requests.RoleAssignmentRequest;
+import com.almor.course_project.dto.requests.UserStatusChangeRequest;
 import com.almor.course_project.model.Campaign;
 import com.almor.course_project.model.Gallery;
 import com.almor.course_project.model.Role;
@@ -12,7 +13,6 @@ import com.almor.course_project.service.entity_services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -42,8 +42,8 @@ public class UserController {
         return userService.getUserEssentials(name);
     }
 
-    @GetMapping("/delete")
-    public ResponseEntity<?> deleteUsers(List<UserDto> users) {
+    @PostMapping("/delete")
+    public ResponseEntity<?> deleteUsers(@RequestBody List<UserDto> users) {
 
         for (int i = 0; i < users.size(); i++) {
 
@@ -62,17 +62,21 @@ public class UserController {
     }
 
     @PostMapping("/changestatus")
-    public ResponseEntity<?> changeUsersStatus(List<UserDto> users, boolean status) {
-        userService.changeUserStatus(users, status);
+    public ResponseEntity<?> changeUsersStatus(@RequestBody UserStatusChangeRequest request) {
+
+        String d = "";
+
+        userService.changeUserStatus(request.getUsers(), request.isNewStatus());
+
         return ResponseEntity.ok("");
     }
 
     @PostMapping("/addrole")
-    public ResponseEntity<?> addRoleToUsers(List<UserDto> users, String roleName) {
+    public ResponseEntity<?> addRoleToUsers(@RequestBody RoleAssignmentRequest request) {
 
-        Role newRole = roleService.getRole(roleName);
+        Role newRole = roleService.getRole(request.getRoleName());
 
-        userService.addRole(users, newRole);
+        userService.addRole(request.getUsers(), newRole);
 
         return ResponseEntity.ok("");
     }
@@ -87,18 +91,18 @@ public class UserController {
 
         //refactor
         boolean result = userService.changeUserName(name);
-        String message = result ? "1" : "2";
+        //String message = result ? "1" : "2";
 
-        return ResponseEntity.ok(new ResultMessageDto(result, message));
+        return ResponseEntity.ok(/*new ResultMessageDto(result, message)*/"");
     }
 
     @GetMapping("/changemail")
     public ResponseEntity<?> changeUserMail(String oldEmail, String newEmail) {
         //refactor
         boolean result = userService.changeUserMail(oldEmail, newEmail);
-        String message = result ? "1" : "2";
+        //String message = result ? "1" : "2";
 
-        return ResponseEntity.ok(new ResultMessageDto(result, message));
+        return ResponseEntity.ok(/*new ResultMessageDto(result, message)*/"");
     }
 
 }

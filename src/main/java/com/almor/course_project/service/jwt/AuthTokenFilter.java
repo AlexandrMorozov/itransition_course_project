@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -29,11 +30,24 @@ public class AuthTokenFilter extends OncePerRequestFilter {
         String jwt = parseJwt(request);
 
         if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
+
             String username = jwtUtils.getUserNameFromJwtToken(jwt);
 
-            UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-            UsernamePasswordAuthenticationToken authentication = createJwtToken(userDetails, request);
-            SecurityContextHolder.getContext().setAuthentication(authentication);
+            try {
+
+                UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+
+                if (!userDetails.isEnabled()) {
+                    SecurityContextHolder.getContext().getAuthentication().setAuthenticated(false);
+                } else {
+                    UsernamePasswordAuthenticationToken authentication = createJwtToken(userDetails, request);
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
+                }
+
+            } catch (UsernameNotFoundException ex) {
+                SecurityContextHolder.getContext().getAuthentication().setAuthenticated(false);
+            }
+
         }
 
         filterChain.doFilter(request, response);
