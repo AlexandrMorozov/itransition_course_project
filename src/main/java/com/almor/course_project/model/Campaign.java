@@ -1,10 +1,8 @@
 package com.almor.course_project.model;
 
-import com.almor.course_project.model.composite_tables.UsersRatings;
 import lombok.*;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
@@ -49,12 +47,12 @@ public class Campaign {
             cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Comment> comments;
 
-    @ManyToMany(fetch = FetchType.LAZY,cascade = {CascadeType.DETACH, CascadeType.MERGE,
-            CascadeType.REFRESH, CascadeType.PERSIST})
+    @ManyToMany(fetch = FetchType.LAZY,/*cascade = {CascadeType.DETACH, CascadeType.MERGE,
+            CascadeType.REFRESH, CascadeType.PERSIST}*/ cascade = CascadeType.ALL)
     @JoinTable(	name = "campaigns_tags",
             joinColumns = @JoinColumn(name = "campaign_id"),
             inverseJoinColumns = @JoinColumn(name = "tag_id"))
-    private Set<Tag> tags = new HashSet<>();
+    private Set<Tag> tags/* = new HashSet<>()*/;
 
 
     @OneToMany(targetEntity = News.class, mappedBy = "campaign",

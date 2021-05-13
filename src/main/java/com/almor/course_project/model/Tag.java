@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -20,5 +21,8 @@ public class Tag {
 
     @Column(unique = true)
     private String name;
+
+   /* @ManyToMany(mappedBy = "tags")
+    private Set<Campaign> campaigns;*/
 
 }
