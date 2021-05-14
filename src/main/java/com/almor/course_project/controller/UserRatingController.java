@@ -14,12 +14,13 @@ public class UserRatingController {
     private RatingService ratingService;
 
     @GetMapping("/average")
-    public Integer getAverageCampaignRating(int campaignId) {
+    public Integer getAverageCampaignRating(Long campaignId) {
         return ratingService.getAverageCampaignRating(campaignId);
     }
 
     @GetMapping("/user")
-    public Integer getUserCampaignRating(int campaignId, int userId) {
+    public Integer getUserCampaignRating(Long campaignId, Long userId) {
         return ratingService.getUserCampaignRating(campaignId, userId);
     }
+
 }

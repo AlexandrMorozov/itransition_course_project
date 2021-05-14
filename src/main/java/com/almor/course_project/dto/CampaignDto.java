@@ -29,6 +29,8 @@ public class CampaignDto {
 
     private int sumOfMoney;
 
+    private int sumOfFundedMoney;
+
     private Date lastUpdateDate;
 
     private Date lastDateOfCampaign;

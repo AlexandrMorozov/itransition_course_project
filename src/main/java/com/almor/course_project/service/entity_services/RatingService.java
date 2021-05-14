@@ -24,12 +24,14 @@ public class RatingService {
 
     }
 
-    public Integer getAverageCampaignRating(int campaignId) {
+    public Integer getAverageCampaignRating(Long campaignId) {
         return usersRatingRepo.findAvgCampaignRating(campaignId);
     }
 
-    public Integer getUserCampaignRating(int campaignId, int userId) {
+    public Integer getUserCampaignRating(Long campaignId, Long userId) {
         return usersRatingRepo.findUserCampaignRating(campaignId, userId);
     }
+
+
 
 }

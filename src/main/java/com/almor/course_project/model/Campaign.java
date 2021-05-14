@@ -48,7 +48,7 @@ public class Campaign {
     private Date lastDateOfCampaign;
 
     @OneToMany(targetEntity = Comment.class, mappedBy = "campaign",
-            cascade = CascadeType.MERGE, orphanRemoval = true)
+            cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Comment> comments;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
@@ -105,7 +105,6 @@ public class Campaign {
                 bonus.setCampaign(this);
             }
         }
-
     }
 
     public void assignPictures() {

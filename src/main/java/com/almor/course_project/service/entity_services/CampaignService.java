@@ -40,6 +40,7 @@ public class CampaignService {
         ogCampaign.setLastDateOfCampaign(campaign.getLastDateOfCampaign());
         ogCampaign.setLastUpdateDate(campaign.getLastUpdateDate());
         ogCampaign.setSumOfMoney(campaign.getSumOfMoney());
+        ogCampaign.setSumOfFundedMoney(campaign.getSumOfFundedMoney());
         ogCampaign.setTopic(campaign.getTopic());
 
         ogCampaign.updateTags(campaign.getTags());
@@ -85,14 +86,28 @@ public class CampaignService {
     }
 
 
-    //
-    public boolean receiveUserDonation(String campaignName, int donationSum) {
+    /*public boolean receiveUserDonation(String campaignName, int donationSum) {
 
         Optional<Campaign> campaign = campaignRepo.findByName(campaignName);
 
         if (campaign.isPresent()) {
 
             campaign.get().addSum(donationSum);
+            campaignRepo.save(campaign.get());
+
+            return true;
+        }
+
+        return false;
+    }*/
+
+    public boolean receiveUserDonation(Long campaignId, int sumOfMoney) {
+
+        Optional<Campaign> campaign = campaignRepo.findById(campaignId);
+
+        if (campaign.isPresent()) {
+
+            campaign.get().addSum(sumOfMoney);
             campaignRepo.save(campaign.get());
 
             return true;

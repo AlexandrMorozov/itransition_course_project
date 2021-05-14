@@ -12,13 +12,11 @@ import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
-/*@Controller*/
 @RestController
 @RequestMapping("/campaign")
 public class CampaignController {
@@ -59,7 +57,6 @@ public class CampaignController {
                                          @RequestParam("campaign") String campaign) {
 
         CampaignDto resultCampaign = campaignService.deserializeCampaign(campaign);
-        Campaign camp = Mappers.getMapper(CampaignMapping.class).dtoToEntity(resultCampaign);
 
         if (!campaignService.isCampaignExists(resultCampaign.getName())) {
 
@@ -67,6 +64,7 @@ public class CampaignController {
                 resultCampaign.addPictures(cloudService.loadImages(files));
             }
 
+            Campaign camp = Mappers.getMapper(CampaignMapping.class).dtoToEntity(resultCampaign);
             camp.setTags(tagService.addNewTags(camp.getTags()));
 
             campaignService.createCampaign(camp);
@@ -80,12 +78,12 @@ public class CampaignController {
                                             @RequestParam("campaign") String campaign) {
 
         CampaignDto resultCampaign = campaignService.deserializeCampaign(campaign);
-        Campaign camp = Mappers.getMapper(CampaignMapping.class).dtoToEntity(resultCampaign);
 
         if (files != null) {
             resultCampaign.addPictures(cloudService.loadImages(files));
         }
 
+        Campaign camp = Mappers.getMapper(CampaignMapping.class).dtoToEntity(resultCampaign);
         camp.setTags(tagService.addNewTags(camp.getTags()));
 
         campaignService.updateCampaign(camp);
@@ -103,9 +101,10 @@ public class CampaignController {
         return ResponseEntity.accepted().body(campaignService.getLastUpdatedCampaigns());
     }
 
-    @GetMapping("/donate")
-    public void donateMoney() {
-
+    @GetMapping("/donatemoney")
+    public void donateMoney(int sumOfMoney, long campaignId) {
+        //Specify return
+        campaignService.receiveUserDonation(campaignId, sumOfMoney);
     }
 
 }

@@ -56,13 +56,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
         http.cors().and().csrf().disable()
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-                .authorizeRequests().antMatchers("/auth/**", "/campaign/getrated", "/campaign/getupdated", "/basetest")
-                .permitAll()
+                .authorizeRequests().antMatchers("/campaign/getcampaign", "/auth/**", "/campaign/getrated",
+                "/campaign/getupdated", "/campaign/donatemoney", "/rating/average", "/rating/user"
+                , "/buybonus","/basetest").permitAll()
                 .antMatchers("/user/delete", "user/changestatus", "user/addrole", "user/getallusers")
                 .hasRole("ADMIN")
                 .anyRequest().authenticated();
 
         http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
     }
-
 }
