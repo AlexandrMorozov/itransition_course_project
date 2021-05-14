@@ -18,7 +18,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
-@Controller
+/*@Controller*/
+@RestController
 @RequestMapping("/campaign")
 public class CampaignController {
 
@@ -44,9 +45,9 @@ public class CampaignController {
     @PostMapping("/delete")
     public ResponseEntity<?> deleteCampaign(@RequestBody List<CampaignDto> campaigns) {
 
-        for (int i = 0; i < campaigns.size(); i++) {
+        for (CampaignDto campaign : campaigns) {
 
-            List<Gallery> deletedPictures = campaignService.deleteCampaign(campaigns.get(i));
+            List<Gallery> deletedPictures = campaignService.deleteCampaign(campaign);
             cloudService.deleteImages(deletedPictures);
         }
 

@@ -8,6 +8,8 @@ public interface UsersRatingRepo extends CrudRepository<UsersRatings, Long> {
 
     @Query("SELECT AVG(ur.rating) FROM UsersRatings ur " +
             "WHERE ur.id.campaignId = ?1 GROUP BY ur.id.campaignId")
-    int findAvgCampaignRating(int campaignId);
+    Integer findAvgCampaignRating(int campaignId);
 
+    @Query("SELECT ur.rating FROM UsersRatings ur WHERE ur.id.campaignId = ?1 AND ur.id.userId = ?2")
+    Integer findUserCampaignRating(int campaignId, int userId);
 }

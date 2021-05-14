@@ -24,4 +24,12 @@ public class RatingService {
 
     }
 
+    public Integer getAverageCampaignRating(int campaignId) {
+        return usersRatingRepo.findAvgCampaignRating(campaignId);
+    }
+
+    public Integer getUserCampaignRating(int campaignId, int userId) {
+        return usersRatingRepo.findUserCampaignRating(campaignId, userId);
+    }
+
 }
