@@ -2,9 +2,13 @@ package com.almor.course_project.controller;
 
 import com.almor.course_project.dto.CampaignDto;
 import com.almor.course_project.dto.CampaignRatingDto;
+import com.almor.course_project.dto.mappings.CampaignMapping;
+import com.almor.course_project.model.Campaign;
 import com.almor.course_project.model.Gallery;
 import com.almor.course_project.service.entity_services.CampaignService;
 import com.almor.course_project.service.cloud_service.CloudService;
+import com.almor.course_project.service.entity_services.TagService;
+import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +27,9 @@ public class CampaignController {
 
     @Autowired
     private CloudService cloudService;
+
+    @Autowired
+    private TagService tagService;
 
     @GetMapping("/getcampaign")
     public ResponseEntity<?> getCampaign(String campaignName) {
@@ -51,13 +58,17 @@ public class CampaignController {
                                          @RequestParam("campaign") String campaign) {
 
         CampaignDto resultCampaign = campaignService.deserializeCampaign(campaign);
-
-        if (files != null) {
-            resultCampaign.addPictures(cloudService.loadImages(files));
-        }
+        Campaign camp = Mappers.getMapper(CampaignMapping.class).dtoToEntity(resultCampaign);
 
         if (!campaignService.isCampaignExists(resultCampaign.getName())) {
-            campaignService.createCampaign(resultCampaign);
+
+            if (files != null) {
+                resultCampaign.addPictures(cloudService.loadImages(files));
+            }
+
+            camp.setTags(tagService.addNewTags(camp.getTags()));
+
+            campaignService.createCampaign(camp);
         }
 
         return ResponseEntity.ok("");
@@ -68,10 +79,13 @@ public class CampaignController {
                                             @RequestParam("campaign") String campaign) {
 
         CampaignDto resultCampaign = campaignService.deserializeCampaign(campaign);
+        Campaign camp = Mappers.getMapper(CampaignMapping.class).dtoToEntity(resultCampaign);
 
         if (files != null) {
             resultCampaign.addPictures(cloudService.loadImages(files));
         }
+
+        camp.setTags(tagService.addNewTags(camp.getTags()));
 
         campaignService.updateCampaign(resultCampaign);
 

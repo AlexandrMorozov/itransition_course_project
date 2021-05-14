@@ -51,10 +51,10 @@ public class Campaign {
             cascade = CascadeType.MERGE, orphanRemoval = true)
     private Set<Comment> comments;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     @JoinTable(	name = "campaigns_tags",
             joinColumns = @JoinColumn(name = "campaign_id"),
-            inverseJoinColumns = @JoinColumn(name = "tag_id"))
+            inverseJoinColumns = {@JoinColumn(name = "tag_id", nullable = false, updatable = false)})
     private Set<Tag> tags = new HashSet<>();
 
     @OneToMany(targetEntity = News.class, mappedBy = "campaign",
@@ -83,13 +83,37 @@ public class Campaign {
         tags.addAll(newTags);
     }
 
+    //
     public void updatePictures(Collection<Gallery> newPictures) {
+
+        //filler(should be removed)
+        pictures = new HashSet<>();
+
         pictures.clear();
         pictures.addAll(newPictures);
+
     }
 
     public void addSum(int donatedSum) {
         sumOfFundedMoney = sumOfFundedMoney + donatedSum;
+    }
+
+    public void assignBonuses() {
+        for (Bonus bonus : bonuses) {
+            bonus.setCampaign(this);
+        }
+    }
+
+    public void assignPictures() {
+        for (Gallery picture : pictures) {
+            picture.setCampaign(this);
+        }
+    }
+
+    public void assignTags() {
+        for (Tag tag : tags) {
+            tag.getCampaigns().add(this);
+        }
     }
 
 }

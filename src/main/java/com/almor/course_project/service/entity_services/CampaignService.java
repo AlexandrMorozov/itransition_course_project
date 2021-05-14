@@ -43,19 +43,16 @@ public class CampaignService {
         ogCampaign.updateTags(campaign.getTags());
         ogCampaign.updateBonuses(campaign.getBonuses());
 
-        attachBonuses(ogCampaign);
-        attachPictures(ogCampaign);
-
         campaignRepo.save(ogCampaign);
     }
 
-    public void createCampaign(CampaignDto dtoCampaign) {
+    public void createCampaign(Campaign campaign) {
 
-        Campaign campaign = Mappers.getMapper(CampaignMapping.class).dtoToEntity(dtoCampaign);
+        campaign.assignBonuses();
+        campaign.assignPictures();
+        campaign.assignTags();
 
-        attachBonuses(campaign);
-        attachPictures(campaign);
-        attachTags(campaign);
+        String f = "";
 
         campaignRepo.save(campaign);
     }
@@ -102,27 +99,6 @@ public class CampaignService {
 
         return false;
     }
-
-
-    private void attachBonuses(Campaign campaign) {
-        for (Bonus bonus : campaign.getBonuses()) {
-            bonus.setCampaign(campaign);
-        }
-    }
-
-    private void attachPictures(Campaign campaign) {
-        for (Gallery gallery : campaign.getPictures()) {
-            gallery.setCampaign(campaign);
-        }
-    }
-
-    private void attachTags(Campaign campaign) {
-        for (Tag tag : campaign.getTags()) {
-            tag.getCampaigns().add(campaign);
-        }
-    }
-
-
 
     public List<CampaignRatingDto> getMostRatedCampaigns() {
         return campaignRepo.findMostRatedCampaigns(PageRequest.of(0, 3));
