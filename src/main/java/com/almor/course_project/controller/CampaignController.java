@@ -88,7 +88,7 @@ public class CampaignController {
 
         camp.setTags(tagService.addNewTags(camp.getTags()));
 
-        campaignService.updateCampaign(resultCampaign);
+        campaignService.updateCampaign(camp);
 
         return ResponseEntity.ok("");
     }

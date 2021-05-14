@@ -27,9 +27,11 @@ public class CampaignService {
     }
 
     //refactor
-    public void updateCampaign(CampaignDto campaignDto) {
+    public void updateCampaign(Campaign campaign) {
 
-        Campaign campaign = Mappers.getMapper(CampaignMapping.class).dtoToEntity(campaignDto);
+        campaign.assignTags();
+        campaign.assignPictures();
+        campaign.assignBonuses();
 
         Campaign ogCampaign = campaignRepo.findById(campaign.getId()).get();
 
@@ -42,6 +44,7 @@ public class CampaignService {
 
         ogCampaign.updateTags(campaign.getTags());
         ogCampaign.updateBonuses(campaign.getBonuses());
+        ogCampaign.updatePictures(campaign.getPictures());
 
         campaignRepo.save(ogCampaign);
     }
@@ -51,8 +54,6 @@ public class CampaignService {
         campaign.assignBonuses();
         campaign.assignPictures();
         campaign.assignTags();
-
-        String f = "";
 
         campaignRepo.save(campaign);
     }

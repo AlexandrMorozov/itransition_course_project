@@ -87,10 +87,10 @@ public class Campaign {
     public void updatePictures(Collection<Gallery> newPictures) {
 
         //filler(should be removed)
-        pictures = new HashSet<>();
+       // pictures = new HashSet<>();
 
-        pictures.clear();
-        pictures.addAll(newPictures);
+        /*pictures.clear();
+        pictures.addAll(newPictures);*/
 
     }
 
@@ -99,20 +99,30 @@ public class Campaign {
     }
 
     public void assignBonuses() {
-        for (Bonus bonus : bonuses) {
-            bonus.setCampaign(this);
+
+        if (bonuses != null) {
+            for (Bonus bonus : bonuses) {
+                bonus.setCampaign(this);
+            }
         }
+
     }
 
     public void assignPictures() {
-        for (Gallery picture : pictures) {
-            picture.setCampaign(this);
+
+        if (pictures != null) {
+            for (Gallery picture : pictures) {
+                picture.setCampaign(this);
+            }
         }
     }
 
     public void assignTags() {
-        for (Tag tag : tags) {
-            tag.getCampaigns().add(this);
+
+        if (tags != null) {
+            for (Tag tag : tags) {
+                tag.getCampaigns().add(this);
+            }
         }
     }
 

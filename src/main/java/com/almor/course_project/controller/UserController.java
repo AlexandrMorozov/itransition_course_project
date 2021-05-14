@@ -45,14 +45,14 @@ public class UserController {
     @PostMapping("/delete")
     public ResponseEntity<?> deleteUsers(@RequestBody List<UserDto> users) {
 
-        for (int i = 0; i < users.size(); i++) {
+        for (UserDto user : users) {
 
-            List<Campaign> deletedCampaigns = userService.deleteUser(users.get(i));
+            List<Campaign> deletedCampaigns = userService.deleteUser(user);
 
-            for (int j = 0; j < deletedCampaigns.size(); j++) {
+            for (Campaign campaign : deletedCampaigns) {
 
                 List<Gallery> deletedPictures = new ArrayList<>();
-                deletedPictures.addAll(deletedCampaigns.get(j).getPictures());
+                deletedPictures.addAll(campaign.getPictures());
 
                 cloudService.deleteImages(deletedPictures);
             }
