@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -22,6 +23,13 @@ public class Bonus {
     @ManyToOne
     @JoinColumn(name = "campaign_id")
     private Campaign campaign;
+
+    @JsonIgnore
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(name = "users_bonuses",
+            joinColumns = @JoinColumn(name = "bonus_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id"))
+    private Set<User> users;
 
     private String name;
 

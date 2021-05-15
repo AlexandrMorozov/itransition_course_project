@@ -3,6 +3,7 @@ package com.almor.course_project.controller;
 import com.almor.course_project.dto.UserDto;
 import com.almor.course_project.dto.UserDtoLite;
 import com.almor.course_project.dto.mappings.BonusMapping;
+import com.almor.course_project.dto.mappings.CampaignMapping;
 import com.almor.course_project.dto.requests.BonusAddingRequest;
 import com.almor.course_project.dto.requests.RoleAssignmentRequest;
 import com.almor.course_project.dto.requests.UserStatusChangeRequest;
@@ -20,7 +21,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.persistence.GeneratedValue;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -114,12 +114,16 @@ public class UserController {
     }
 
     @PostMapping("/purchasebonus")
-    public void purchaseBonus(@RequestBody BonusAddingRequest bonusRequest) {
+    public ResponseEntity<?> purchaseBonus(@RequestBody BonusAddingRequest bonusRequest) {
 
         Bonus bonus = Mappers.getMapper(BonusMapping.class).dtoToEntity(bonusRequest.getBonus());
+        Campaign campaign = Mappers.getMapper(CampaignMapping.class).dtoToEntity(bonusRequest.getCampaign());
         Long userId = bonusRequest.getUserId();
 
-        userService.purchaseBonus(userId, bonus);
+        campaignService.receivePayment(campaign.getId(), bonus.getSum());
+        userService.purchaseBonus(campaign, userId, bonus);
+
+        return ResponseEntity.ok("");
     }
 
 

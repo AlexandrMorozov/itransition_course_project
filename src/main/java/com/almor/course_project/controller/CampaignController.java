@@ -107,7 +107,7 @@ public class CampaignController {
     @GetMapping("/donatemoney")
     public ResponseEntity<?> donateMoney(int sumOfMoney, Long campaignId) {
         //Specify return
-        campaignService.receiveUserDonation(campaignId, sumOfMoney);
+        campaignService.receivePayment(campaignId, sumOfMoney);
         return ResponseEntity.ok("");
     }
 

@@ -203,9 +203,13 @@ public class UserService implements UserDetailsService {
         userRepo.save(user);
     }
 
-    public void purchaseBonus(/*Campaign targetCampaign,*/Long userId, Bonus bonus) {
+    public void purchaseBonus(Campaign targetCampaign, Long userId, Bonus bonus) {
+
+        targetCampaign.addSum(bonus.getSum());
 
         User user = userRepo.findById(userId).get();
+
+        bonus.setCampaign(targetCampaign);
         user.addBonus(bonus);
 
         userRepo.save(user);

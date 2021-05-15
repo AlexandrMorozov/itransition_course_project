@@ -85,7 +85,7 @@ public class CampaignService {
         return resultCampaign;
     }
 
-    public void receiveUserDonation(Long campaignId, int sumOfMoney) {
+    public void receivePayment(Long campaignId, int sumOfMoney) {
 
         //ref
         /*Optional<Campaign>*/Campaign campaign = campaignRepo.findById(campaignId).get();
