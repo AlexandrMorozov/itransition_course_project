@@ -33,7 +33,7 @@ public class User {
     @JoinTable(	name = "users_roles",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private Set<Role> roles = new HashSet<>(); //explain-explain
+    private Set<Role> roles = new HashSet<>();
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "users_bonuses",
@@ -41,12 +41,12 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "bonus_id"))
     private Set<Bonus> bonuses;
 
-    @JsonIgnore
+    @JsonIgnore//
     @OneToMany(targetEntity = Campaign.class, mappedBy = "user",
             cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Campaign> campaigns;
 
-    @JsonIgnore
+    @JsonIgnore//
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<UsersRatings> usersRatings = new HashSet<>();
 
@@ -56,5 +56,16 @@ public class User {
 
     public boolean isOwnsRole(Role role) {
         return roles.contains(role);
+    }
+
+    public void addRating(UsersRatings userRating) {
+        usersRatings.add(userRating);
+    }
+
+    public void addBonus(Bonus bonus) {
+        if (bonuses == null) {
+            bonuses = new HashSet<>();
+        }
+        bonuses.add(bonus);
     }
 }

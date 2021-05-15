@@ -21,7 +21,7 @@ public class UserDetailsImpl implements UserDetails {
     private Long id;
 
     private String name;
-    @JsonIgnore
+    @JsonIgnore//
     private String password;
 
     private String email;
@@ -31,6 +31,7 @@ public class UserDetailsImpl implements UserDetails {
     private Collection<? extends GrantedAuthority> authorities;
 
     public static UserDetails buildUserDetails(User user) {
+
         List<GrantedAuthority> authorities = user.getRoles().stream()
                 .map(role -> new SimpleGrantedAuthority(role.getRoleName()))
                 .collect(Collectors.toList());

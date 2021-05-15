@@ -7,7 +7,7 @@ import org.mapstruct.Mapper;
 @Mapper(componentModel = "spring")
 public interface BonusMapping {
 
-    BonusDto entityToDto(Bonus bonus);//
+    BonusDto entityToDto(Bonus bonus);
     Bonus dtoToEntity(BonusDto bonusDto);
 
 }

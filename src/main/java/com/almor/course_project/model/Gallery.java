@@ -12,6 +12,7 @@ import javax.persistence.*;
 @Table(name = "gallery")
 public class Gallery {
 
+    //
     public Gallery(String pictureLink, String publicId) {
         this.pictureLink = pictureLink;
         this.publicId = publicId;

@@ -6,9 +6,12 @@ import com.almor.course_project.dto.UserDtoLite;
 import com.almor.course_project.dto.mappings.UserMapping;
 import com.almor.course_project.dto.requests.LoginRequest;
 import com.almor.course_project.dto.requests.SigninRequest;
+import com.almor.course_project.model.Bonus;
 import com.almor.course_project.model.Campaign;
 import com.almor.course_project.model.Role;
 import com.almor.course_project.model.User;
+import com.almor.course_project.model.composite_tables.UsersRatings;
+import com.almor.course_project.model.composite_tables_keys.UsersRatingsKey;
 import com.almor.course_project.repos.RoleRepo;
 import com.almor.course_project.repos.UserRepo;
 import com.almor.course_project.service.jwt.JwtUtils;
@@ -187,6 +190,26 @@ public class UserService implements UserDetailsService {
             return true;
         }
         return false;
+    }
+
+    public void addRating(Campaign ratedCampaign, int rating, Long userId) {
+
+        User user = userRepo.findById(userId).get();
+        UsersRatingsKey key = new UsersRatingsKey(userId, ratedCampaign.getId());
+        UsersRatings userRating = new UsersRatings(key, user, ratedCampaign, rating);
+
+        user.addRating(userRating);
+
+        userRepo.save(user);
+    }
+
+    public void purchaseBonus(/*Campaign targetCampaign,*/Long userId, Bonus bonus) {
+
+        User user = userRepo.findById(userId).get();
+        user.addBonus(bonus);
+
+        userRepo.save(user);
+
     }
 
 }

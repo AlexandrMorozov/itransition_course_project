@@ -16,7 +16,7 @@ public interface CampaignRepo extends CrudRepository<Campaign, Long> {
     @Query("SELECT new com.almor.course_project.dto.CampaignRatingDto(" +
             "c.id, c.name, c.description, AVG(ur.rating), c.lastUpdateDate, c.user)" +
             " FROM Campaign c " +
-            "INNER JOIN UsersRatings ur ON c.id = ur.id.campaignId " +
+            "INNER JOIN UsersRatings ur ON c.id = ur.id.campaignid " +
             "GROUP BY c.name, c.id ORDER BY AVG(ur.rating) DESC")
     List<CampaignRatingDto> findMostRatedCampaigns(Pageable pageable);
 
@@ -24,7 +24,7 @@ public interface CampaignRepo extends CrudRepository<Campaign, Long> {
     @Query("SELECT new com.almor.course_project.dto.CampaignRatingDto(" +
             "c.id, c.name, c.description, AVG(ur.rating), c.lastUpdateDate,c.user)" +
             " FROM Campaign c " +
-            "LEFT JOIN UsersRatings ur ON c.id = ur.id.campaignId " +
+            "LEFT JOIN UsersRatings ur ON c.id = ur.id.campaignid " +
             "GROUP BY c.name, c.id ORDER BY c.lastUpdateDate DESC")
     List<CampaignRatingDto> findRecentlyUpdatedCampaigns(Pageable pageable);
 

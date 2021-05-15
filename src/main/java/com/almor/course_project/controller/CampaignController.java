@@ -31,10 +31,14 @@ public class CampaignController {
     private TagService tagService;
 
     @GetMapping("/getcampaign")
-    public ResponseEntity<?> getCampaign(String campaignName) {
+    public ResponseEntity<?> getCampaignByName(String campaignName) {
+
+        //Mappers.getMapper(CampaignMapping.class).entityToDto()
 
         if (campaignService.isCampaignExists(campaignName)) {
-            return ResponseEntity.ok(campaignService.getCampaign(campaignName));
+           // return ResponseEntity.ok(campaignService.getCampaign(campaignName));
+            return ResponseEntity.ok(Mappers.getMapper(CampaignMapping.class)
+                    .entityToDto(campaignService.getCampaign(campaignName)));
         }
 
         return new ResponseEntity<>("Campaign not found", HttpStatus.BAD_REQUEST);
@@ -44,7 +48,6 @@ public class CampaignController {
     public ResponseEntity<?> deleteCampaign(@RequestBody List<CampaignDto> campaigns) {
 
         for (CampaignDto campaign : campaigns) {
-
             List<Gallery> deletedPictures = campaignService.deleteCampaign(campaign);
             cloudService.deleteImages(deletedPictures);
         }
@@ -102,9 +105,10 @@ public class CampaignController {
     }
 
     @GetMapping("/donatemoney")
-    public void donateMoney(int sumOfMoney, long campaignId) {
+    public ResponseEntity<?> donateMoney(int sumOfMoney, Long campaignId) {
         //Specify return
         campaignService.receiveUserDonation(campaignId, sumOfMoney);
+        return ResponseEntity.ok("");
     }
 
 }

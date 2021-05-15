@@ -18,7 +18,7 @@ public class Bonus {
     @Column(name = "bonus_id")
     private Long id;
 
-    @JsonIgnore
+    @JsonIgnore//
     @ManyToOne
     @JoinColumn(name = "campaign_id")
     private Campaign campaign;

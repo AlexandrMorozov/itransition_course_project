@@ -3,13 +3,13 @@ package com.almor.course_project.model.composite_tables;
 import com.almor.course_project.model.Comment;
 import com.almor.course_project.model.User;
 import com.almor.course_project.model.composite_tables_keys.UsersLikesKey;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
-@Data
+
+@Getter
+@Setter
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor

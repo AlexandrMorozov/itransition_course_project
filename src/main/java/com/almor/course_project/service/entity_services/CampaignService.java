@@ -19,11 +19,11 @@ public class CampaignService {
     @Autowired
     private CampaignRepo campaignRepo;
 
-    public CampaignDto getCampaign(String campaignName) {
+    public /*CampaignDto*/Campaign getCampaign(String campaignName) {
 
         Optional<Campaign> campaign = campaignRepo.findByName(campaignName);
 
-        return Mappers.getMapper(CampaignMapping.class).entityToDto(campaign.get());
+        return campaign.get()/*Mappers.getMapper(CampaignMapping.class).entityToDto(campaign.get())*/;
     }
 
     //refactor
@@ -85,35 +85,21 @@ public class CampaignService {
         return resultCampaign;
     }
 
+    public void receiveUserDonation(Long campaignId, int sumOfMoney) {
 
-    /*public boolean receiveUserDonation(String campaignName, int donationSum) {
+        //ref
+        /*Optional<Campaign>*/Campaign campaign = campaignRepo.findById(campaignId).get();
 
-        Optional<Campaign> campaign = campaignRepo.findByName(campaignName);
-
-        if (campaign.isPresent()) {
-
-            campaign.get().addSum(donationSum);
-            campaignRepo.save(campaign.get());
-
-            return true;
-        }
-
-        return false;
-    }*/
-
-    public boolean receiveUserDonation(Long campaignId, int sumOfMoney) {
-
-        Optional<Campaign> campaign = campaignRepo.findById(campaignId);
-
-        if (campaign.isPresent()) {
+       /* if (campaign.isPresent()) {
 
             campaign.get().addSum(sumOfMoney);
             campaignRepo.save(campaign.get());
+        }*/
 
-            return true;
-        }
+        campaign.addSum(sumOfMoney);
+        campaignRepo.save(campaign);
 
-        return false;
+        //return false;
     }
 
     public List<CampaignRatingDto> getMostRatedCampaigns() {

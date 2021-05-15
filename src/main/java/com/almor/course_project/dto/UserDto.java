@@ -19,7 +19,7 @@ public class UserDto {
 
     private String email;
 
-    private boolean isEnabled;//
+    private boolean isEnabled;
     
     private Set<BonusDto> bonuses;
     

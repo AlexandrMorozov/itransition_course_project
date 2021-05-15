@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ResultMessageDto {
 
+    //delete
     private boolean result;
 
     private String message;
