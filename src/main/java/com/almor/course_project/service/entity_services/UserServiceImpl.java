@@ -15,6 +15,7 @@ import com.almor.course_project.model.composite_tables_keys.UsersRatingsKey;
 import com.almor.course_project.repos.UserRepo;
 import com.almor.course_project.service.jwt.JwtUtils;
 import com.almor.course_project.service.jwt.UserDetailsImpl;
+import com.almor.course_project.service.service_interfaces.UserService;
 import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -35,7 +36,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-public class UserService implements UserDetailsService {
+public class UserServiceImpl implements UserDetailsService, UserService {
 
     @Autowired
     private UserRepo userRepo;
@@ -153,11 +154,11 @@ public class UserService implements UserDetailsService {
         }
     }
 
-    //
     public boolean changeUserName(String userName) {
+
         String currentUserName = SecurityContextHolder.getContext().getAuthentication().getName();
 
-        if (userRepo.findByName(userName) == null) {
+        if (!userRepo.findByName(userName).isPresent()) {
             User user = userRepo.findByName(currentUserName).get();
             user.setName(userName);
             userRepo.save(user);
@@ -167,13 +168,14 @@ public class UserService implements UserDetailsService {
         return false;
     }
 
-    //
     public boolean changeUserMail(String oldEmail, String newEmail) {
 
-        if (userRepo.findByEmail(newEmail) == null) {
+        if (!userRepo.findByEmail(newEmail).isPresent()) {
+
             User user = userRepo.findByEmail(oldEmail).get();
             user.setEmail(newEmail);
             userRepo.save(user);
+
             return true;
         }
         return false;
@@ -200,18 +202,6 @@ public class UserService implements UserDetailsService {
         userRepo.save(user);
 
         return true;
-
-       /* if (!user.isOwnsBonus(bonus)) {
-            bonus.setCampaign(targetCampaign);
-            user.addBonus(bonus);
-
-            userRepo.save(user);
-
-            return true;
-        }*/
-
-       // return false;
-
     }
 
 }

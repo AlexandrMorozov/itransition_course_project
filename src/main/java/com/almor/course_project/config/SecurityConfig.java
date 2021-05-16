@@ -2,7 +2,7 @@ package com.almor.course_project.config;
 
 import com.almor.course_project.service.jwt.AuthEntryPoint;
 import com.almor.course_project.service.jwt.AuthTokenFilter;
-import com.almor.course_project.service.entity_services.UserService;
+import com.almor.course_project.service.entity_services.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,7 +23,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig extends WebSecurityConfigurerAdapter{
 
     @Autowired
-    UserService userDetailsService;
+    UserServiceImpl userDetailsService;
 
     @Autowired
     private AuthEntryPoint authEntryPoint;

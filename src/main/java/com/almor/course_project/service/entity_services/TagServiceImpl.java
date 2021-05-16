@@ -4,6 +4,7 @@ import com.almor.course_project.dto.TagDto;
 import com.almor.course_project.dto.mappings.TagMapping;
 import com.almor.course_project.model.Tag;
 import com.almor.course_project.repos.TagRepo;
+import com.almor.course_project.service.service_interfaces.TagService;
 import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,7 +13,7 @@ import java.util.List;
 import java.util.Set;
 
 @Service
-public class TagService {
+public class TagServiceImpl implements TagService {
 
     @Autowired
     private TagRepo tagRepo;

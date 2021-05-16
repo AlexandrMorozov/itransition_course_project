@@ -1,6 +1,7 @@
 package com.almor.course_project.service.cloud_service;
 
 import com.almor.course_project.model.Gallery;
+import com.almor.course_project.service.service_interfaces.CloudService;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,14 +16,14 @@ import java.util.Map;
 
 //Service to work with cloud storage
 @Service
-public class CloudService {
+public class CloudServiceImpl implements CloudService {
 
     private Cloudinary cloudinary;
 
     @Autowired
-    public CloudService( @Value("${CLOUDINARY_CLOUD_NAME}") String name,
-                         @Value("${CLOUDINARY_API_KEY}") String key,
-                         @Value("${CLOUDINARY_API_SECRET}") String secret ) {
+    public CloudServiceImpl(@Value("${CLOUDINARY_CLOUD_NAME}") String name,
+                            @Value("${CLOUDINARY_API_KEY}") String key,
+                            @Value("${CLOUDINARY_API_SECRET}") String secret ) {
 
         cloudinary = new Cloudinary(ObjectUtils.asMap(
                 "cloud_name", name,

@@ -4,8 +4,8 @@ import com.almor.course_project.dto.requests.JwtResponse;
 import com.almor.course_project.dto.requests.LoginRequest;
 import com.almor.course_project.dto.requests.SigninRequest;
 import com.almor.course_project.model.Role;
-import com.almor.course_project.service.entity_services.RoleService;
-import com.almor.course_project.service.entity_services.UserService;
+import com.almor.course_project.service.service_interfaces.RoleService;
+import com.almor.course_project.service.service_interfaces.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

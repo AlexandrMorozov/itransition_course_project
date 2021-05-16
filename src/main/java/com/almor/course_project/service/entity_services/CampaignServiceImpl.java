@@ -5,6 +5,7 @@ import com.almor.course_project.dto.CampaignRatingDto;
 import com.almor.course_project.dto.mappings.CampaignMapping;
 import com.almor.course_project.model.*;
 import com.almor.course_project.repos.CampaignRepo;
+import com.almor.course_project.service.service_interfaces.CampaignService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +15,7 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 
 @Service
-public class CampaignService {
+public class CampaignServiceImpl implements CampaignService {
 
     @Autowired
     private CampaignRepo campaignRepo;
