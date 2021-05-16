@@ -74,4 +74,16 @@ public class User {
         bonuses.add(bonus);
     }
 
+    public boolean isBonusPurchased(Bonus bonus) {
+
+        for (Bonus selectedBonus : bonuses) {
+
+            if (selectedBonus.getName().equals(bonus.getName())) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
 }

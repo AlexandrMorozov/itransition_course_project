@@ -75,7 +75,7 @@ public class Campaign {
 
     @OneToMany(targetEntity = Gallery.class, mappedBy = "campaign",
             cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Gallery> pictures;
+    private Set<Gallery> pictures = new HashSet<>();
 
     @JsonIgnore
     @OneToMany(mappedBy = "campaign", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -100,15 +100,9 @@ public class Campaign {
         tags.addAll(newTags);
     }
 
-    //
     public void updatePictures(Collection<Gallery> newPictures) {
-
-        //filler(should be removed)
-       // pictures = new HashSet<>();
-
-        /*pictures.clear();
-        pictures.addAll(newPictures);*/
-
+        pictures.clear();
+        pictures.addAll(newPictures);
     }
 
     public void addSum(int donatedSum) {

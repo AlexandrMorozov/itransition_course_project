@@ -196,12 +196,17 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
         User user = userRepo.findById(userId).get();
 
-        bonus.setCampaign(targetCampaign);
-        user.addBonus(bonus);
+        if (!user.isBonusPurchased(bonus)) {
 
-        userRepo.save(user);
+            bonus.setCampaign(targetCampaign);
+            user.addBonus(bonus);
 
-        return true;
+            userRepo.save(user);
+
+            return true;
+        }
+
+        return false;
     }
 
 }
