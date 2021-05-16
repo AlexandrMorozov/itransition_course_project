@@ -22,7 +22,7 @@ public class RegistrationController {
     @PostMapping("/registration")
     public boolean createUser(@RequestBody SigninRequest user) {
 
-        if (userService.isUserExists(user.getUsername())) {
+        if (!userService.isUserExists(user.getUsername())) {
 
             Role newUserRole = roleService.getRole("ROLE_USER");
             userService.registerUser(user, newUserRole);

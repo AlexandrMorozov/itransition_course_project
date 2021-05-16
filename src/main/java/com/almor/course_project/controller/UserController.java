@@ -45,7 +45,7 @@ public class UserController {
     }
 
     @PostMapping("/delete")
-    public ResponseEntity<?> deleteUsers(@RequestBody List<UserDto> users) {
+    public ResponseEntity deleteUsers(@RequestBody List<UserDto> users) {
 
         for (UserDto user : users) {
 
@@ -60,15 +60,15 @@ public class UserController {
             }
         }
 
-        return ResponseEntity.ok("");
+        return ResponseEntity.ok().build();
     }
 
     @PostMapping("/changestatus")
-    public ResponseEntity<?> changeUsersStatus(@RequestBody UserStatusChangeRequest request) {
+    public ResponseEntity changeUsersStatus(@RequestBody UserStatusChangeRequest request) {
 
         userService.changeUserStatus(request.getUsers(), request.isNewStatus());
 
-        return ResponseEntity.ok("");
+        return ResponseEntity.ok().build();
     }
 
     @PostMapping("/addrole")
