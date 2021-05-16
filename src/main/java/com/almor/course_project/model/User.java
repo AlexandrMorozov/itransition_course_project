@@ -11,10 +11,19 @@ import java.util.Set;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
+//@AllArgsConstructor
 @Entity
 @Table(name = "users")
 public class User {
+
+    public User(String name, String password, String email,
+                boolean isEnabled, Set<Role> roles) {
+        this.name = name;
+        this.password = password;
+        this.email = email;
+        this.isEnabled = isEnabled;
+        this.roles = roles;
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,23 +48,19 @@ public class User {
     @JoinTable(name = "users_bonuses",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "bonus_id"))
-    private Set<Bonus> bonuses;
+    private Set<Bonus> bonuses = new HashSet<>();
 
-    @JsonIgnore//
+    @JsonIgnore
     @OneToMany(targetEntity = Campaign.class, mappedBy = "user",
             cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Campaign> campaigns;
 
-    @JsonIgnore//
+    @JsonIgnore
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<UsersRatings> usersRatings = new HashSet<>();
 
     public void addRole(Role role) {
         roles.add(role);
-    }
-
-    public boolean isOwnsRole(Role role) {
-        return roles.contains(role);
     }
 
     public void addRating(UsersRatings userRating) {
@@ -68,4 +73,5 @@ public class User {
         }
         bonuses.add(bonus);
     }
+
 }

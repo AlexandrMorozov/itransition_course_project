@@ -15,5 +15,4 @@ public interface CampaignMapping {
 
     List<CampaignDto> fromListModelToListDto(List<Campaign> campaigns);
 
-    List<Campaign> fromListDtoToModelList(List<CampaignDto> dtoCampaigns);//
 }

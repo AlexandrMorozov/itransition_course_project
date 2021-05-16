@@ -19,43 +19,37 @@ public class CampaignService {
     @Autowired
     private CampaignRepo campaignRepo;
 
-    public /*CampaignDto*/Campaign getCampaign(String campaignName) {
+    public Campaign getCampaign(String campaignName) {
 
         Optional<Campaign> campaign = campaignRepo.findByName(campaignName);
 
-        return campaign.get()/*Mappers.getMapper(CampaignMapping.class).entityToDto(campaign.get())*/;
+        return campaign.get();
     }
 
-    //refactor
-    public void updateCampaign(Campaign campaign) {
+    public void updateCampaign(Campaign updatedCampaign) {
 
-        campaign.assignTags();
-        campaign.assignPictures();
-        campaign.assignBonuses();
+        updatedCampaign.assignCampaignElements();
 
-        Campaign ogCampaign = campaignRepo.findById(campaign.getId()).get();
+        Campaign originalCampaign = campaignRepo.findById(updatedCampaign.getId()).get();
 
-        ogCampaign.setName(campaign.getName());
-        ogCampaign.setDescription(campaign.getDescription());
-        ogCampaign.setLastDateOfCampaign(campaign.getLastDateOfCampaign());
-        ogCampaign.setLastUpdateDate(campaign.getLastUpdateDate());
-        ogCampaign.setSumOfMoney(campaign.getSumOfMoney());
-        ogCampaign.setSumOfFundedMoney(campaign.getSumOfFundedMoney());
-        ogCampaign.setTopic(campaign.getTopic());
+        originalCampaign.setName(updatedCampaign.getName());
+        originalCampaign.setDescription(updatedCampaign.getDescription());
+        originalCampaign.setLastDateOfCampaign(updatedCampaign.getLastDateOfCampaign());
+        originalCampaign.setLastUpdateDate(updatedCampaign.getLastUpdateDate());
+        originalCampaign.setSumOfMoney(updatedCampaign.getSumOfMoney());
+        originalCampaign.setSumOfFundedMoney(updatedCampaign.getSumOfFundedMoney());
+        originalCampaign.setTopic(updatedCampaign.getTopic());
 
-        ogCampaign.updateTags(campaign.getTags());
-        ogCampaign.updateBonuses(campaign.getBonuses());
-        ogCampaign.updatePictures(campaign.getPictures());
+        originalCampaign.updateTags(updatedCampaign.getTags());
+        originalCampaign.updateBonuses(updatedCampaign.getBonuses());
+        originalCampaign.updatePictures(updatedCampaign.getPictures());//!!!!
 
-        campaignRepo.save(ogCampaign);
+        campaignRepo.save(originalCampaign);
     }
 
     public void createCampaign(Campaign campaign) {
 
-        campaign.assignBonuses();
-        campaign.assignPictures();
-        campaign.assignTags();
-
+        campaign.assignCampaignElements();
         campaignRepo.save(campaign);
     }
 
@@ -79,7 +73,7 @@ public class CampaignService {
         try {
             resultCampaign = new ObjectMapper().readValue(serializedCampaign, CampaignDto.class);
         } catch (Exception e) {
-
+            System.out.println(e);
         }
 
         return resultCampaign;
@@ -87,19 +81,10 @@ public class CampaignService {
 
     public void receivePayment(Long campaignId, int sumOfMoney) {
 
-        //ref
-        /*Optional<Campaign>*/Campaign campaign = campaignRepo.findById(campaignId).get();
-
-       /* if (campaign.isPresent()) {
-
-            campaign.get().addSum(sumOfMoney);
-            campaignRepo.save(campaign.get());
-        }*/
-
+        Campaign campaign = campaignRepo.findById(campaignId).get();
         campaign.addSum(sumOfMoney);
-        campaignRepo.save(campaign);
 
-        //return false;
+        campaignRepo.save(campaign);
     }
 
     public List<CampaignRatingDto> getMostRatedCampaigns() {

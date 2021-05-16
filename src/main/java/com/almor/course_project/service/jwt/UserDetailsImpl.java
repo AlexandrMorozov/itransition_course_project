@@ -1,7 +1,6 @@
 package com.almor.course_project.service.jwt;
 
 import com.almor.course_project.model.User;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -21,7 +20,7 @@ public class UserDetailsImpl implements UserDetails {
     private Long id;
 
     private String name;
-    @JsonIgnore//
+
     private String password;
 
     private String email;

@@ -27,17 +27,18 @@ public class AuthTokenFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
 
-        String jwt = parseJwt(request);
+        String jwtToken = parseJwt(request);
 
-        if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
+        if (jwtToken != null && jwtUtils.validateJwtToken(jwtToken)) {
 
-            String username = jwtUtils.getUserNameFromJwtToken(jwt);
+            String username = jwtUtils.getUserNameFromJwtToken(jwtToken);
 
             try {
 
                 UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
                 if (!userDetails.isEnabled()) {
+                    //if user is disabled
                     SecurityContextHolder.getContext().getAuthentication().setAuthenticated(false);
                 } else {
                     UsernamePasswordAuthenticationToken authentication = createJwtToken(userDetails, request);
@@ -45,6 +46,7 @@ public class AuthTokenFilter extends OncePerRequestFilter {
                 }
 
             } catch (UsernameNotFoundException ex) {
+                //if user not found or deleted
                 SecurityContextHolder.getContext().getAuthentication().setAuthenticated(false);
             }
 
@@ -53,9 +55,13 @@ public class AuthTokenFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 
-    private UsernamePasswordAuthenticationToken createJwtToken(UserDetails userDetails, HttpServletRequest request) {
-        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-                userDetails, null, userDetails.getAuthorities());
+    private UsernamePasswordAuthenticationToken createJwtToken(UserDetails userDetails,
+                                                               HttpServletRequest request) {
+
+        UsernamePasswordAuthenticationToken authentication =
+                new UsernamePasswordAuthenticationToken(userDetails,
+                        null, userDetails.getAuthorities());
+
         authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
         return authentication;
@@ -64,7 +70,7 @@ public class AuthTokenFilter extends OncePerRequestFilter {
     private String parseJwt(HttpServletRequest request) {
         String requestHeader = request.getHeader("Authorization");
         if (StringUtils.hasText(requestHeader) && requestHeader.startsWith("Bearer ")) {
-            return requestHeader.substring(7, requestHeader.length());
+            return requestHeader.substring(7);
         }
 
         return null;

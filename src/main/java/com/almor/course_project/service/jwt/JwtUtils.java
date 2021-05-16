@@ -8,26 +8,27 @@ import org.springframework.stereotype.Component;
 import io.jsonwebtoken.security.Keys;
 
 import javax.crypto.SecretKey;
-import java.util.Base64;
 import java.util.Date;
 
 @Component
 public class JwtUtils {
 
-    private SecretKey JwtSecret;
-    @Value("${com.almor.JwtExpirationMs}")
-    private int JwtExpirationMs;
+    private SecretKey jwtSecretKey;
+    @Value("${com.almor.jwtExpirationTime}")
+    private int jwtExpirationTime;
 
     public JwtUtils() {
-        JwtSecret = Keys.secretKeyFor(SignatureAlgorithm.HS512);
+        jwtSecretKey = Keys.secretKeyFor(SignatureAlgorithm.HS512);
     }
 
     public boolean validateJwtToken(String authToken) {
         try {
-            Jwts.parserBuilder().setSigningKey(JwtSecret).build().parseClaimsJws(authToken);
+            Jwts.parserBuilder().setSigningKey(jwtSecretKey).build().parseClaimsJws(authToken);
             return true;
         } catch (Exception e) {
+            System.out.println(e);
         }
+
         return false;
     }
 
@@ -35,12 +36,12 @@ public class JwtUtils {
 
         return Jwts.builder()
                 .setSubject(authentication.getName())
-                .setIssuedAt(new Date()).setExpiration(new Date ((new Date()).getTime() + JwtExpirationMs))
-                .signWith(SignatureAlgorithm.HS512, JwtSecret).compact();
+                .setIssuedAt(new Date()).setExpiration(new Date ((new Date()).getTime() + jwtExpirationTime))
+                .signWith(SignatureAlgorithm.HS512, jwtSecretKey).compact();
     }
 
     public String getUserNameFromJwtToken(String authToken) {
-        return Jwts.parserBuilder().setSigningKey(JwtSecret)
+        return Jwts.parserBuilder().setSigningKey(jwtSecretKey)
                 .build().parseClaimsJws(authToken).getBody().getSubject();
     }
 

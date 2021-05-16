@@ -12,7 +12,6 @@ import com.almor.course_project.model.Role;
 import com.almor.course_project.model.User;
 import com.almor.course_project.model.composite_tables.UsersRatings;
 import com.almor.course_project.model.composite_tables_keys.UsersRatingsKey;
-import com.almor.course_project.repos.RoleRepo;
 import com.almor.course_project.repos.UserRepo;
 import com.almor.course_project.service.jwt.JwtUtils;
 import com.almor.course_project.service.jwt.UserDetailsImpl;
@@ -42,9 +41,6 @@ public class UserService implements UserDetailsService {
     private UserRepo userRepo;
 
     @Autowired
-    private RoleRepo roleRepo;
-
-    @Autowired
     private PasswordEncoder passwordEncoder;
 
     @Autowired
@@ -66,20 +62,18 @@ public class UserService implements UserDetailsService {
         return UserDetailsImpl.buildUserDetails(user.get());
     }
 
-    public void addUser(SigninRequest user) {
+    public void registerUser(SigninRequest user, Role newUserRole) {
 
-        User newUser = new User();
-        newUser.setName(user.getUsername());
-        newUser.setPassword(passwordEncoder.encode(user.getPassword()));
-        newUser.setEmail(user.getEmail());
-        newUser.setEnabled(true);
-        newUser.setRoles(Collections.singleton(roleRepo.findByRoleName("ROLE_USER")));
+        String userPassword = passwordEncoder.encode(user.getPassword());
+
+        User newUser = new User(user.getUsername(), userPassword, user.getEmail(),
+                true, Collections.singleton(newUserRole));
 
         userRepo.save(newUser);
     }
 
-    //Refactor
-    public JwtResponse checkUser(LoginRequest user) {
+
+    public JwtResponse authorizeUser(LoginRequest user) {
 
         Authentication auth = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
@@ -111,7 +105,6 @@ public class UserService implements UserDetailsService {
 
     public List<UserDto> getAllUsers() {
         List<User> users = userRepo.findAll();
-
         return Mappers.getMapper(UserMapping.class).fromListModelToListDto(users);
     }
 
@@ -128,7 +121,6 @@ public class UserService implements UserDetailsService {
         User user = Mappers.getMapper(UserMapping.class).dtoToEntity(userDto);
 
         List<Campaign> deletedCampaigns = new ArrayList<>();
-
         deletedCampaigns.addAll(user.getCampaigns());
 
         userRepo.delete(user);
@@ -142,14 +134,11 @@ public class UserService implements UserDetailsService {
         List<User> users = Mappers.getMapper(UserMapping.class)
                 .fromListDtoToListModel(usersDto);
 
-        for(int i = 0; i < users.size(); i++) {
-
-            users.get(i).setEnabled(status);
-
+        for(User user : users) {
+            user.setEnabled(status);
         }
 
         userRepo.saveAll(users);
-
     }
 
     public void addRole(List<UserDto> usersDto, Role newRole) {
@@ -157,17 +146,14 @@ public class UserService implements UserDetailsService {
         List<User> users = Mappers.getMapper(UserMapping.class)
                 .fromListDtoToListModel(usersDto);
 
-        for (int i = 0; i < users.size(); i++) {
+        for (User user : users) {
 
-            if (!users.get(i).isOwnsRole(newRole)) {
-
-                users.get(i).addRole(newRole);
-
-                userRepo.save(users.get(i));
-            }
+            user.addRole(newRole);
+            userRepo.save(user);
         }
     }
 
+    //
     public boolean changeUserName(String userName) {
         String currentUserName = SecurityContextHolder.getContext().getAuthentication().getName();
 
@@ -181,6 +167,7 @@ public class UserService implements UserDetailsService {
         return false;
     }
 
+    //
     public boolean changeUserMail(String oldEmail, String newEmail) {
 
         if (userRepo.findByEmail(newEmail) == null) {
@@ -203,9 +190,7 @@ public class UserService implements UserDetailsService {
         userRepo.save(user);
     }
 
-    public void purchaseBonus(Campaign targetCampaign, Long userId, Bonus bonus) {
-
-        targetCampaign.addSum(bonus.getSum());
+    public boolean purchaseBonus(Campaign targetCampaign, Long userId, Bonus bonus) {
 
         User user = userRepo.findById(userId).get();
 
@@ -213,6 +198,19 @@ public class UserService implements UserDetailsService {
         user.addBonus(bonus);
 
         userRepo.save(user);
+
+        return true;
+
+       /* if (!user.isOwnsBonus(bonus)) {
+            bonus.setCampaign(targetCampaign);
+            user.addBonus(bonus);
+
+            userRepo.save(user);
+
+            return true;
+        }*/
+
+       // return false;
 
     }
 

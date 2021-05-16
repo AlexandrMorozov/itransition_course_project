@@ -31,32 +31,29 @@ public class CampaignController {
     private TagService tagService;
 
     @GetMapping("/getcampaign")
-    public ResponseEntity<?> getCampaignByName(String campaignName) {
-
-        //Mappers.getMapper(CampaignMapping.class).entityToDto()
+    public CampaignDto getCampaignByName(String campaignName) {
 
         if (campaignService.isCampaignExists(campaignName)) {
-           // return ResponseEntity.ok(campaignService.getCampaign(campaignName));
-            return ResponseEntity.ok(Mappers.getMapper(CampaignMapping.class)
-                    .entityToDto(campaignService.getCampaign(campaignName)));
+            return Mappers.getMapper(CampaignMapping.class)
+                    .entityToDto(campaignService.getCampaign(campaignName));
         }
 
-        return new ResponseEntity<>("Campaign not found", HttpStatus.BAD_REQUEST);
+        return null;
     }
 
     @PostMapping("/delete")
-    public ResponseEntity<?> deleteCampaign(@RequestBody List<CampaignDto> campaigns) {
+    public ResponseEntity deleteCampaigns(@RequestBody List<CampaignDto> campaigns) {
 
         for (CampaignDto campaign : campaigns) {
             List<Gallery> deletedPictures = campaignService.deleteCampaign(campaign);
             cloudService.deleteImages(deletedPictures);
         }
 
-        return ResponseEntity.ok("");
+        return ResponseEntity.ok().build();
     }
 
     @PostMapping("/add")
-    public ResponseEntity<?> addCampaign(@RequestParam(value = "image", required = false) List<MultipartFile> files,
+    public boolean addCampaign(@RequestParam(value = "image", required = false) List<MultipartFile> files,
                                          @RequestParam("campaign") String campaign) {
 
         CampaignDto resultCampaign = campaignService.deserializeCampaign(campaign);
@@ -71,13 +68,15 @@ public class CampaignController {
             camp.setTags(tagService.addNewTags(camp.getTags()));
 
             campaignService.createCampaign(camp);
+
+            return true;
         }
 
-        return ResponseEntity.ok("");
+        return false;
     }
 
     @PostMapping("/update")
-    public ResponseEntity<?> updateCampaign(@RequestParam(value = "image", required = false) List<MultipartFile> files,
+    public boolean updateCampaign(@RequestParam(value = "image", required = false) List<MultipartFile> files,
                                             @RequestParam("campaign") String campaign) {
 
         CampaignDto resultCampaign = campaignService.deserializeCampaign(campaign);
@@ -91,24 +90,23 @@ public class CampaignController {
 
         campaignService.updateCampaign(camp);
 
-        return ResponseEntity.ok("");
+        return true;
     }
 
     @GetMapping("/getrated")
-    public ResponseEntity<List<CampaignRatingDto>> getMostRatedCampaigns() {
-        return ResponseEntity.accepted().body(campaignService.getMostRatedCampaigns());
+    public List<CampaignRatingDto> getMostRatedCampaigns() {
+        return campaignService.getMostRatedCampaigns();
     }
 
     @GetMapping("/getupdated")
-    public ResponseEntity<List<CampaignRatingDto>> getLastUpdatedCampaigns() {
-        return ResponseEntity.accepted().body(campaignService.getLastUpdatedCampaigns());
+    public List<CampaignRatingDto> getLastUpdatedCampaigns() {
+        return campaignService.getLastUpdatedCampaigns();
     }
 
     @GetMapping("/donatemoney")
-    public ResponseEntity<?> donateMoney(int sumOfMoney, Long campaignId) {
-        //Specify return
+    public ResponseEntity donateMoney(int sumOfMoney, Long campaignId) {
         campaignService.receivePayment(campaignId, sumOfMoney);
-        return ResponseEntity.ok("");
+        return ResponseEntity.ok().build();
     }
 
 }

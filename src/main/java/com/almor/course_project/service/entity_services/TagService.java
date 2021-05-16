@@ -18,17 +18,12 @@ public class TagService {
     private TagRepo tagRepo;
 
     public List<TagDto> getAllTags() {
-
-        List<TagDto> dtoTags = Mappers.getMapper(TagMapping.class)
+        return Mappers.getMapper(TagMapping.class)
                 .fromListModelToListDto(tagRepo.findAll());
-
-        return dtoTags;
     }
 
     public Set<Tag> addNewTags(Set<Tag> newTags) {
-
         tagRepo.saveAll(newTags);
-
         return newTags;
     }
 

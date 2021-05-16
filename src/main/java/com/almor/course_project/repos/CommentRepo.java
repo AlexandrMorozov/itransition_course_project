@@ -8,6 +8,7 @@ import java.util.List;
 
 public interface CommentRepo extends CrudRepository<Comment, Long> {
 
+    //delete
     List<Comment> findAllById(Long campaignId);
 
     @Query("SELECT cm.id, cm.text, cm.commentAuthor.name," +

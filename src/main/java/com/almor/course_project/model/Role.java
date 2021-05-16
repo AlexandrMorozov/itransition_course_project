@@ -19,20 +19,4 @@ public class Role {
 
     private String roleName;
 
-    @Override
-    public boolean equals(Object object) {
-
-        boolean equalsResult = false;
-
-        if (object != null && object.getClass() == getClass()) {
-            Role role = (Role) object;
-
-            if (role.roleName == this.roleName) {
-                return true;
-            }
-        }
-
-        return equalsResult;
-    }
-
 }

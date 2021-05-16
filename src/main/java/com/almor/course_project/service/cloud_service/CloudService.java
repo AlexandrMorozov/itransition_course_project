@@ -32,8 +32,7 @@ public class CloudService {
 
     private String[] loadImageToCloud(MultipartFile sourceFile) {
 
-        Map<String, Object> result = null;
-
+        Map<String, Object> result;
         String[] answer = null;
 
         try {
@@ -43,7 +42,7 @@ public class CloudService {
             answer = new String[] { result.get("url").toString(), result.get("public_id").toString()};
 
         } catch (IOException e) {
-
+            System.out.println(e);
         }
 
         return answer;
@@ -53,7 +52,7 @@ public class CloudService {
         try {
             cloudinary.uploader().destroy(publicId, ObjectUtils.asMap());
         } catch (IOException e) {
-
+            System.out.println(e);
         }
     }
 

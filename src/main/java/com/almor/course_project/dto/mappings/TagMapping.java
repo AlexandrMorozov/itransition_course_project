@@ -12,11 +12,9 @@ import java.util.List;
 public interface TagMapping {
 
     Tag fromDtoToModel(TagDto tagDto);
+
     TagDto fromModelToDto(Tag tag);
+
     List<TagDto> fromListModelToListDto(List<Tag> tags);
-    List<Tag> fromListDtoToListModel(List<TagDto> tagDtos);//
-
-
-
 
 }

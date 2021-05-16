@@ -37,5 +37,4 @@ public class Bonus {
 
     private String description;
 
-
 }

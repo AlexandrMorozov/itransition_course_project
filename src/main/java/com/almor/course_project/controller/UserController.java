@@ -4,20 +4,14 @@ import com.almor.course_project.dto.UserDto;
 import com.almor.course_project.dto.UserDtoLite;
 import com.almor.course_project.dto.mappings.BonusMapping;
 import com.almor.course_project.dto.mappings.CampaignMapping;
-import com.almor.course_project.dto.requests.BonusAddingRequest;
-import com.almor.course_project.dto.requests.RoleAssignmentRequest;
-import com.almor.course_project.dto.requests.UserStatusChangeRequest;
-import com.almor.course_project.model.Bonus;
-import com.almor.course_project.model.Campaign;
-import com.almor.course_project.model.Gallery;
-import com.almor.course_project.model.Role;
+import com.almor.course_project.dto.requests.*;
+import com.almor.course_project.model.*;
 import com.almor.course_project.service.cloud_service.CloudService;
 import com.almor.course_project.service.entity_services.CampaignService;
 import com.almor.course_project.service.entity_services.RoleService;
 import com.almor.course_project.service.entity_services.UserService;
 import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -38,11 +32,11 @@ public class UserController {
     private CampaignService campaignService;
 
     @GetMapping
-    public ResponseEntity<?> getUser(String name) {
+    public UserDto getUser(String name) {
         if (userService.isUserExists(name)) {
-            return ResponseEntity.ok(userService.getUser(name));
+            return userService.getUser(name);
         }
-        return new ResponseEntity<>("User not found", HttpStatus.BAD_REQUEST);
+        return null;
     }
 
     @GetMapping("/essentials")
@@ -78,12 +72,12 @@ public class UserController {
     }
 
     @PostMapping("/addrole")
-    public ResponseEntity<?> addRoleToUsers(@RequestBody RoleAssignmentRequest request) {
+    public ResponseEntity addRoleToUsers(@RequestBody RoleAssignmentRequest request) {
 
         Role newRole = roleService.getRole(request.getRoleName());
         userService.addRole(request.getUsers(), newRole);
 
-        return ResponseEntity.ok("");
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/getallusers")
@@ -92,40 +86,42 @@ public class UserController {
     }
 
     @GetMapping("/changename")
-    public ResponseEntity<?> changeUserName(String name) {
-        boolean result = userService.changeUserName(name);
-        return ResponseEntity.ok("");
+    public ResponseEntity changeUserName(String name) {
+        userService.changeUserName(name);
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/changemail")
-    public ResponseEntity<?> changeUserMail(String oldEmail, String newEmail) {
-        boolean result = userService.changeUserMail(oldEmail, newEmail);
-        return ResponseEntity.ok("");
+    public ResponseEntity changeUserMail(String oldEmail, String newEmail) {
+        userService.changeUserMail(oldEmail, newEmail);
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/addrating")
-    public ResponseEntity<?> addUserRating(Long userId, String campaignName, int ratingValue) {
+    public ResponseEntity addUserRating(Long userId, String campaignName, int ratingValue) {
 
         Campaign campaign = campaignService.getCampaign(campaignName);
         userService.addRating(campaign, ratingValue, userId);
 
-        return ResponseEntity.ok("Rating added");
+        return ResponseEntity.ok().build();
 
     }
 
     @PostMapping("/purchasebonus")
-    public ResponseEntity<?> purchaseBonus(@RequestBody BonusAddingRequest bonusRequest) {
+    public boolean purchaseBonus(@RequestBody BonusAddingRequest bonusRequest) {
 
         Bonus bonus = Mappers.getMapper(BonusMapping.class).dtoToEntity(bonusRequest.getBonus());
-        Campaign campaign = Mappers.getMapper(CampaignMapping.class).dtoToEntity(bonusRequest.getCampaign());
+        Campaign campaign = Mappers.getMapper(CampaignMapping.class)
+                .dtoToEntity(bonusRequest.getCampaign());
+
         Long userId = bonusRequest.getUserId();
 
-        campaignService.receivePayment(campaign.getId(), bonus.getSum());
-        userService.purchaseBonus(campaign, userId, bonus);
+        if (userService.purchaseBonus(campaign, userId, bonus)) {
+            campaignService.receivePayment(campaign.getId(), bonus.getSum());
+            return true;
+        }
 
-        return ResponseEntity.ok("");
+        return false;
     }
-
-
 
 }

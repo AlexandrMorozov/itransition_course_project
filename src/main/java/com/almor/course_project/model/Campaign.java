@@ -3,6 +3,8 @@ package com.almor.course_project.model;
 import com.almor.course_project.model.composite_tables.UsersRatings;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
+import org.hibernate.search.annotations.Field;
+import org.hibernate.search.annotations.Indexed;
 
 import javax.persistence.*;
 import java.util.Collection;
@@ -15,6 +17,8 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+//for the future full text search
+@Indexed
 @Table(name = "campaigns")
 public class Campaign {
 
@@ -31,19 +35,23 @@ public class Campaign {
     @JoinColumn(name = "topic_id")
     private Topic topic;
 
+    @Field
     private String name;
 
     private String description;
 
     private String videoLink;
 
+    @Field
     private int sumOfMoney;
 
+    @Field
     private int sumOfFundedMoney;
 
     @Temporal(TemporalType.DATE)
     private Date lastUpdateDate;
 
+    @Field
     @Temporal(TemporalType.DATE)
     private Date lastDateOfCampaign;
 
@@ -73,6 +81,15 @@ public class Campaign {
     @OneToMany(mappedBy = "campaign", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<UsersRatings> usersRatings = new HashSet<>();
 
+
+    public void assignCampaignElements() {
+
+        assignBonuses();
+        assignPictures();
+        assignTags();
+
+    }
+
     public void updateBonuses(Collection<Bonus> newBonuses) {
         bonuses.clear();
         bonuses.addAll(newBonuses);
@@ -98,7 +115,7 @@ public class Campaign {
         sumOfFundedMoney = sumOfFundedMoney + donatedSum;
     }
 
-    public void assignBonuses() {
+    private void assignBonuses() {
 
         if (bonuses != null) {
             for (Bonus bonus : bonuses) {
@@ -107,7 +124,7 @@ public class Campaign {
         }
     }
 
-    public void assignPictures() {
+    private void assignPictures() {
 
         if (pictures != null) {
             for (Gallery picture : pictures) {
@@ -116,7 +133,7 @@ public class Campaign {
         }
     }
 
-    public void assignTags() {
+    private void assignTags() {
 
         if (tags != null) {
             for (Tag tag : tags) {
