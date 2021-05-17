@@ -3,8 +3,6 @@ package com.almor.course_project.model;
 import com.almor.course_project.model.composite_tables.UsersRatings;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
-import org.hibernate.search.annotations.Field;
-import org.hibernate.search.annotations.Indexed;
 
 import javax.persistence.*;
 import java.util.Collection;
@@ -17,8 +15,6 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-//for the future full text search
-@Indexed
 @Table(name = "campaigns")
 public class Campaign {
 
@@ -35,23 +31,19 @@ public class Campaign {
     @JoinColumn(name = "topic_id")
     private Topic topic;
 
-    @Field
     private String name;
 
     private String description;
 
     private String videoLink;
 
-    @Field
     private int sumOfMoney;
 
-    @Field
     private int sumOfFundedMoney;
 
     @Temporal(TemporalType.DATE)
     private Date lastUpdateDate;
 
-    @Field
     @Temporal(TemporalType.DATE)
     private Date lastDateOfCampaign;
 
