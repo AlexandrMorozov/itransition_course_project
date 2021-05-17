@@ -1,9 +1,6 @@
-/*Roles generation*/
 INSERT INTO roles(role_name) VALUES
-('ROLE_USER'), ('ROLE_ADMIN')
+('ROLE_USER'), ('ROLE_ADMIN');
 
-
-/*Topics generation*/
 INSERT INTO topics(theme) VALUES
 ('security'),('investment'),('games'),
 ('literature'),('cinema'),('pets'),
@@ -12,7 +9,6 @@ INSERT INTO topics(theme) VALUES
 ('architecture'),('tabletop games'),('cartoons'),
 ('charity');
 
-/*Tags generation*/
 INSERT INTO tags(name) VALUES
 ('Ankunding and Sons'),
 ('Smith, Schuster and Kunde'),
